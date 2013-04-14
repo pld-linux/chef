@@ -3,7 +3,7 @@
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	11.4.0
-Release:	0.4
+Release:	0.5
 License:	Apache v2.0
 Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
@@ -11,6 +11,7 @@ Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
 URL:		http://wiki.opscode.com/display/chef
 BuildRequires:	rpm-rubyprov
 BuildRequires:	rpmbuild(macros) >= 1.656
+Requires:	lsb-release
 Requires:	ruby >= 1:1.8.7
 Requires:	ruby-erubis
 Requires:	ruby-highline >= 1.6.9
