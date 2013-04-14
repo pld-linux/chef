@@ -1,0 +1,17 @@
+--- chef-11.4.0/lib/chef/platform.rb~	2013-04-14 16:43:01.000000000 +0300
++++ chef-11.4.0/lib/chef/platform.rb	2013-04-14 21:34:43.907576130 +0300
+@@ -147,6 +147,14 @@
+               :mdadm => Chef::Provider::Mdadm
+             }
+           },
++          :pld => {
++            :default => {
++              :service => Chef::Provider::Service::Redhat,
++              :cron => Chef::Provider::Cron,
++              :package => Chef::Provider::Package::Yum,
++              :mdadm => Chef::Provider::Mdadm
++            }
++          },
+           :suse     => {
+             :default => {
+               :service => Chef::Provider::Service::Redhat,
