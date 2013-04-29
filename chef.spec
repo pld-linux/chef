@@ -1,3 +1,7 @@
+#
+# Conditional build:
+%bcond_with	tests		# build without tests
+
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	11.4.4
@@ -13,14 +17,18 @@ BuildRequires:	rpm-rubyprov
 BuildRequires:	rpmbuild(macros) >= 1.656
 BuildRequires:	sed >= 4.0
 %if %{with tests}
+BuildRequires:	ruby-abstract
+BuildRequires:	ruby-mixlib-authentication >= 1.3.0
 BuildRequires:	ruby-rack
 BuildRequires:	ruby-rake
-BuildRequires:	ruby-rdoc
+#BuildRequires:	ruby-rdoc
 BuildRequires:	ruby-rspec-core >= 2.12.0
 BuildRequires:	ruby-rspec-expectations >= 2.12.0
 BuildRequires:	ruby-rspec-mocks >= 2.12.0
-BuildRequires:	ruby-rspec_junit_formatter
-BuildRequires:	ruby-sdoc
+BuildRequires:	ruby-rest-client >= 1.0.4
+BuildRequires:	ruby-net-ssh-multi >= 1.1.0
+#BuildRequires:	ruby-rspec_junit_formatter
+#BuildRequires:	ruby-sdoc
 %endif
 Requires:	lsb-release
 Requires:	ruby-erubis
@@ -51,6 +59,11 @@ configuration management to your entire infrastructure.
 %patch1 -p1
 
 %{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
+
+%build
+%if %{with tests}
+rspec spec
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
