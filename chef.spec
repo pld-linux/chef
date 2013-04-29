@@ -1,14 +1,13 @@
-# TODO
-# - try not to use /var/chef
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	11.4.4
-Release:	0.11
+Release:	0.12
 License:	Apache v2.0
 Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
 # Source0-md5:	dc50aa6a4a7d4785a4c82fcaab3f9436
 Patch0:		platform-pld.patch
+Patch1:		FHS.patch
 URL:		http://wiki.opscode.com/display/chef
 BuildRequires:	rpm-rubyprov
 BuildRequires:	rpmbuild(macros) >= 1.656
@@ -49,16 +48,17 @@ configuration management to your entire infrastructure.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{ruby_vendorlibdir},%{_bindir}}
+install -d $RPM_BUILD_ROOT{%{ruby_vendorlibdir},%{_bindir}} \
+	$RPM_BUILD_ROOT{%{_sysconfdir},/var/{cache,lib}}/%{name}
 cp -a lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
 cp -a bin/* $RPM_BUILD_ROOT%{_bindir}
 
-install -d $RPM_BUILD_ROOT{%{_sysconfdir},/var}/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -76,5 +76,5 @@ rm -rf $RPM_BUILD_ROOT
 %{ruby_vendorlibdir}/chef.rb
 %{ruby_vendorlibdir}/chef
 
-# FIXME: FHS
-%dir /var/%{name}
+%dir /var/lib/%{name}
+%dir /var/cache/%{name}
