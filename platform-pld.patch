@@ -8,7 +8,7 @@
 +            :default => {
 +              :service => Chef::Provider::Service::Redhat,
 +              :cron => Chef::Provider::Cron,
-+              :package => Chef::Provider::Package::Yum,
++              :package => Chef::Provider::Package::Poldek,
 +              :mdadm => Chef::Provider::Mdadm
 +            }
 +          },

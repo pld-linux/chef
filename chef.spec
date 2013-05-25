@@ -5,7 +5,7 @@
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	11.4.4
-Release:	1
+Release:	2
 License:	Apache v2.0
 Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
@@ -13,6 +13,8 @@ Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
 Source1:	%{name}.rb
 Patch0:		platform-pld.patch
 Patch1:		FHS.patch
+Patch2:		https://github.com/glensc/chef/compare/poldek.patch
+# Patch2-md5:	df7d8380da401ba9c37faeeb9250ae36
 URL:		http://wiki.opscode.com/display/chef
 BuildRequires:	rpm-rubyprov
 BuildRequires:	rpmbuild(macros) >= 1.656
@@ -32,6 +34,7 @@ BuildRequires:	ruby-rspec-mocks >= 2.12.0
 #BuildRequires:	ruby-sdoc
 %endif
 Requires:	lsb-release
+Requires:	poldek >= 0.30
 Requires:	ruby-erubis
 Requires:	ruby-highline >= 1.6.9
 Requires:	ruby-json >= 1.4.4
@@ -46,7 +49,6 @@ Requires:	ruby-ohai >= 0.6.0
 Requires:	ruby-rest-client >= 1.0.4
 Requires:	ruby-rubygems
 Requires:	ruby-yajl >= 1.1
-Requires:	yum >= 3.4.3-7
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -58,6 +60,7 @@ configuration management to your entire infrastructure.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
 
