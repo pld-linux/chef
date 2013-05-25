@@ -10,6 +10,7 @@ License:	Apache v2.0
 Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
 # Source0-md5:	dc50aa6a4a7d4785a4c82fcaab3f9436
+Source1:	%{name}.rb
 Patch0:		platform-pld.patch
 Patch1:		FHS.patch
 URL:		http://wiki.opscode.com/display/chef
@@ -72,6 +73,7 @@ install -d $RPM_BUILD_ROOT{%{ruby_vendorlibdir},%{_bindir}} \
 cp -a lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
 cp -a bin/* $RPM_BUILD_ROOT%{_bindir}
 
+cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/chef.rb
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -80,6 +82,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc README.md CONTRIBUTING.md
 %dir %{_sysconfdir}/%{name}
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/chef.rb
 %attr(755,root,root) %{_bindir}/chef-apply
 %attr(755,root,root) %{_bindir}/chef-client
 %attr(755,root,root) %{_bindir}/chef-shell
