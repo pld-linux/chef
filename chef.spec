@@ -14,7 +14,7 @@ Source1:	%{name}.rb
 Patch0:		platform-pld.patch
 Patch1:		FHS.patch
 Patch2:		https://github.com/glensc/chef/compare/poldek.patch
-# Patch2-md5:	df7d8380da401ba9c37faeeb9250ae36
+# Patch2-md5:	33b8cea4ad717221a26fcad84116804c
 URL:		http://wiki.opscode.com/display/chef
 BuildRequires:	rpm-rubyprov
 BuildRequires:	rpmbuild(macros) >= 1.656
