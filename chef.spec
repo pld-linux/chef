@@ -15,6 +15,8 @@ Patch0:		platform-pld.patch
 Patch1:		FHS.patch
 Patch2:		https://github.com/glensc/chef/compare/poldek.patch
 # Patch2-md5:	33b8cea4ad717221a26fcad84116804c
+Patch3:		https://github.com/glensc/chef/compare/pld-knife-boostrap.patch
+# Patch3-md5:	6bf0e1782343e38fa896e16255d78957
 URL:		http://wiki.opscode.com/display/chef
 BuildRequires:	rpm-rubyprov
 BuildRequires:	rpmbuild(macros) >= 1.656
@@ -61,6 +63,7 @@ configuration management to your entire infrastructure.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
 
