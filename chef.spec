@@ -74,10 +74,11 @@ rspec spec
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{ruby_vendorlibdir},%{_bindir}} \
+install -d $RPM_BUILD_ROOT{%{ruby_vendorlibdir},%{_bindir},%{_mandir}/man1} \
 	$RPM_BUILD_ROOT{%{_sysconfdir},/var/{cache,lib}}/%{name}
 cp -a lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
 cp -a bin/* $RPM_BUILD_ROOT%{_bindir}
+cp -a distro/common/man/* $RPM_BUILD_ROOT%{_mandir}
 
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/chef.rb
 
@@ -95,6 +96,30 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/chef-solo
 %attr(755,root,root) %{_bindir}/knife
 %attr(755,root,root) %{_bindir}/shef
+%{_mandir}/man1/chef-shell.1*
+%{_mandir}/man1/knife-bootstrap.1*
+%{_mandir}/man1/knife-client.1*
+%{_mandir}/man1/knife-configure.1*
+%{_mandir}/man1/knife-cookbook-site.1*
+%{_mandir}/man1/knife-cookbook.1*
+%{_mandir}/man1/knife-data-bag.1*
+%{_mandir}/man1/knife-environment.1*
+%{_mandir}/man1/knife-exec.1*
+%{_mandir}/man1/knife-index.1*
+%{_mandir}/man1/knife-node.1*
+%{_mandir}/man1/knife-role.1*
+%{_mandir}/man1/knife-search.1*
+%{_mandir}/man1/knife-ssh.1*
+%{_mandir}/man1/knife-status.1*
+%{_mandir}/man1/knife-tag.1*
+%{_mandir}/man1/knife.1*
+%{_mandir}/man8/chef-client.8*
+%{_mandir}/man8/chef-expander.8*
+%{_mandir}/man8/chef-expanderctl.8*
+%{_mandir}/man8/chef-server-webui.8*
+%{_mandir}/man8/chef-server.8*
+%{_mandir}/man8/chef-solo.8*
+%{_mandir}/man8/chef-solr.8*
 %{ruby_vendorlibdir}/chef.rb
 %{ruby_vendorlibdir}/chef
 
