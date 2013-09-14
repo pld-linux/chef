@@ -4,12 +4,12 @@
 
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
-Version:	11.4.4
-Release:	5
+Version:	11.6.0
+Release:	1
 License:	Apache v2.0
 Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
-# Source0-md5:	dc50aa6a4a7d4785a4c82fcaab3f9436
+# Source0-md5:	3e8f67a5d11144573cf2c8d520ca39a6
 Source1:	%{name}.rb
 Patch0:		platform-pld.patch
 Patch1:		FHS.patch
@@ -23,8 +23,12 @@ BuildRequires:	rpmbuild(macros) >= 1.656
 BuildRequires:	sed >= 4.0
 %if %{with tests}
 BuildRequires:	ruby-abstract
+BuildRequires:	ruby-chef-zero < 2
+BuildRequires:	ruby-chef-zero >= 1.4
 BuildRequires:	ruby-mixlib-authentication >= 1.3.0
 BuildRequires:	ruby-net-ssh-multi >= 1.1.0
+BuildRequires:	ruby-puma < 2
+BuildRequires:	ruby-puma >= 1.6
 BuildRequires:	ruby-rack
 BuildRequires:	ruby-rake
 #BuildRequires:	ruby-rdoc
@@ -37,6 +41,7 @@ BuildRequires:	ruby-rspec-mocks >= 2.12.0
 %endif
 Requires:	lsb-release
 Requires:	poldek >= 0.30
+Requires:	ruby >= 1:1.9.3.429-4
 Requires:	ruby-erubis
 Requires:	ruby-highline >= 1.6.9
 Requires:	ruby-json >= 1.4.4
@@ -51,7 +56,6 @@ Requires:	ruby-ohai >= 0.6.0
 Requires:	ruby-rest-client >= 1.0.4
 Requires:	ruby-rubygems
 Requires:	ruby-yajl >= 1.1
-Requires:	ruby >= 1:1.9.3.429-4
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -93,6 +97,7 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/chef.rb
 %attr(755,root,root) %{_bindir}/chef-apply
 %attr(755,root,root) %{_bindir}/chef-client
+%attr(755,root,root) %{_bindir}/chef-service-manager
 %attr(755,root,root) %{_bindir}/chef-shell
 %attr(755,root,root) %{_bindir}/chef-solo
 %attr(755,root,root) %{_bindir}/knife
