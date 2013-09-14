@@ -70,6 +70,8 @@ configuration management to your entire infrastructure.
 %patch2 -p1
 %patch3 -p1
 
+grep --exclude-dir=spec --exclude-dir=distro -r /var/chef . && exit 1
+
 %{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
 
 %build
