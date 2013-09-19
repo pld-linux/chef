@@ -5,7 +5,7 @@
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	11.6.0
-Release:	2
+Release:	3
 License:	Apache v2.0
 Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
@@ -14,7 +14,7 @@ Source1:	%{name}.rb
 Patch0:		platform-pld.patch
 Patch1:		FHS.patch
 Patch2:		https://github.com/glensc/chef/compare/poldek.patch
-# Patch2-md5:	de55627051f1e0486d29814eb305c7f4
+# Patch2-md5:	5a0fc35de33910b41cba4e87dcb4bf9a
 Patch3:		https://github.com/glensc/chef/compare/pld-knife-boostrap.patch
 # Patch3-md5:	bfc884469fad7b5aa46341402be5fccd
 URL:		http://wiki.opscode.com/display/chef
