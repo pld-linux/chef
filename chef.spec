@@ -5,7 +5,7 @@
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	11.6.0
-Release:	3
+Release:	4
 License:	Apache v2.0
 Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
@@ -82,7 +82,8 @@ rspec spec
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{ruby_vendorlibdir},%{_bindir},%{_mandir}/man1} \
-	$RPM_BUILD_ROOT{%{_sysconfdir},/var/{cache,lib}}/%{name}
+	$RPM_BUILD_ROOT{%{_sysconfdir}/%{name},/var/{cache/%{name},lib/%{name}/{roles,data_bags,environments}}}
+
 cp -a lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
 cp -a bin/* $RPM_BUILD_ROOT%{_bindir}
 cp -a distro/common/man/* $RPM_BUILD_ROOT%{_mandir}
@@ -132,4 +133,8 @@ rm -rf $RPM_BUILD_ROOT
 %{ruby_vendorlibdir}/chef
 
 %dir /var/lib/%{name}
+%dir /var/lib/%{name}/roles
+%dir /var/lib/%{name}/data_bags
+%dir /var/lib/%{name}/environments
+
 %dir /var/cache/%{name}
