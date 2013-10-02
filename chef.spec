@@ -5,7 +5,7 @@
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	11.6.0
-Release:	4
+Release:	5
 License:	Apache v2.0
 Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
@@ -58,6 +58,9 @@ Requires:	ruby-rubygems
 Requires:	ruby-yajl >= 1.1
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+# do not generate python dependency, yum support is optional
+%define		_noautoreqfiles %{ruby_vendorlibdir}/chef/provider/package/yum-dump.py
 
 %description
 A systems integration framework, built to bring the benefits of
