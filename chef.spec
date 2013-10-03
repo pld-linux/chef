@@ -5,12 +5,13 @@
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	11.6.0
-Release:	5
+Release:	6
 License:	Apache v2.0
 Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
 # Source0-md5:	3e8f67a5d11144573cf2c8d520ca39a6
 Source1:	%{name}.rb
+Source2:	%{name}.tmpfiles
 Patch0:		platform-pld.patch
 Patch1:		FHS.patch
 Patch2:		https://github.com/glensc/chef/compare/poldek.patch
@@ -84,14 +85,15 @@ rspec spec
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{ruby_vendorlibdir},%{_bindir},%{_mandir}/man1} \
-	$RPM_BUILD_ROOT{%{_sysconfdir}/%{name},/var/{cache/%{name},lib/%{name}/{roles,data_bags,environments}}}
+install -d $RPM_BUILD_ROOT{%{ruby_vendorlibdir},%{_bindir},%{_mandir}/man1,%{systemdtmpfilesdir}} \
+	$RPM_BUILD_ROOT{%{_sysconfdir}/%{name},/var/{run/%{name},cache/%{name},lib/%{name}/{roles,data_bags,environments}}}
 
 cp -a lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
 cp -a bin/* $RPM_BUILD_ROOT%{_bindir}
 cp -a distro/common/man/* $RPM_BUILD_ROOT%{_mandir}
 
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/chef.rb
+cp -p %{SOURCE2} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -134,6 +136,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/chef-solr.8*
 %{ruby_vendorlibdir}/chef.rb
 %{ruby_vendorlibdir}/chef
+%{systemdtmpfilesdir}/chef.conf
 
 %dir /var/lib/%{name}
 %dir /var/lib/%{name}/roles
@@ -141,3 +144,4 @@ rm -rf $RPM_BUILD_ROOT
 %dir /var/lib/%{name}/environments
 
 %dir /var/cache/%{name}
+%dir /var/run/%{name}
