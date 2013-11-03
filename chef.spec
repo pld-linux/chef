@@ -4,12 +4,12 @@
 
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
-Version:	11.6.0
-Release:	6
+Version:	11.6.2
+Release:	1
 License:	Apache v2.0
 Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
-# Source0-md5:	3e8f67a5d11144573cf2c8d520ca39a6
+# Source0-md5:	8db9eb4b3c75be30e8125ea4eedd3f01
 Source1:	%{name}.rb
 Source2:	%{name}.tmpfiles
 Patch0:		platform-pld.patch
