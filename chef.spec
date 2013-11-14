@@ -4,12 +4,12 @@
 
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
-Version:	11.6.2
-Release:	3
+Version:	11.8.0
+Release:	0.1
 License:	Apache v2.0
 Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
-# Source0-md5:	8db9eb4b3c75be30e8125ea4eedd3f01
+# Source0-md5:	522cb7dfcff513a575f6c68493030584
 Source1:	%{name}.rb
 Source2:	%{name}.tmpfiles
 Patch0:		platform-pld.patch
@@ -40,7 +40,7 @@ BuildRequires:	ruby-rspec-mocks >= 2.12.0
 #BuildRequires:	ruby-rspec_junit_formatter
 #BuildRequires:	ruby-sdoc
 %endif
-Requires:	diffutils
+#Requires:	diffutils
 Requires:	lsb-release
 Requires:	poldek >= 0.30
 Requires:	ruby >= 1:1.9.3.429-4
