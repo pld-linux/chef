@@ -5,13 +5,15 @@
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	11.6.2
-Release:	6
+Release:	7
 License:	Apache v2.0
 Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
 # Source0-md5:	8db9eb4b3c75be30e8125ea4eedd3f01
 Source1:	%{name}.rb
 Source2:	%{name}.tmpfiles
+Source3:	https://raw.github.com/stevendanna/knife-hacks/master/shell/knife_completion.sh
+# Source3-md5:	a4c1e41370be8088a59ddb3b2e7ea397
 Patch0:		platform-pld.patch
 Patch1:		FHS.patch
 Patch2:		https://github.com/glensc/chef/compare/poldek.patch
@@ -20,7 +22,7 @@ Patch3:		https://github.com/glensc/chef/compare/pld-knife-boostrap.patch
 # Patch3-md5:	8ff0fdfde6dc90018698775bf8f13062
 URL:		http://wiki.opscode.com/display/chef
 BuildRequires:	rpm-rubyprov
-BuildRequires:	rpmbuild(macros) >= 1.656
+BuildRequires:	rpmbuild(macros) >= 1.673
 BuildRequires:	sed >= 4.0
 %if %{with tests}
 BuildRequires:	ruby-abstract
@@ -69,6 +71,19 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 A systems integration framework, built to bring the benefits of
 configuration management to your entire infrastructure.
 
+%package -n bash-completion-knife
+Summary:	bash-completion for knife
+Summary(pl.UTF-8):	bashowe uzupełnianie nazw dla knifea
+Group:		Applications/Shells
+Requires:	%{name} >= 0.10
+Requires:	bash-completion >= 2.0
+
+%description -n bash-completion-knife
+This package provides bash-completion for knife.
+
+%description -n bash-completion-knife -l pl.UTF-8
+Pakiet ten dostarcza bashowe uzupełnianie nazw dla knifea.
+
 %prep
 %setup -q
 %patch0 -p1
@@ -96,6 +111,9 @@ cp -a distro/common/man/* $RPM_BUILD_ROOT%{_mandir}
 
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/chef.rb
 cp -p %{SOURCE2} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
+
+install -d $RPM_BUILD_ROOT%{bash_compdir}
+cp -p %{SOURCE3} $RPM_BUILD_ROOT%{bash_compdir}/knife
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -148,3 +166,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %dir /var/cache/%{name}
 %dir /var/run/%{name}
+
+%files -n bash-completion-knife
+%defattr(644,root,root,755)
+%{bash_compdir}/knife
