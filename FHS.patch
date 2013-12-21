@@ -1,5 +1,5 @@
---- chef-11.8.0/lib/chef/config.rb~	2013-12-21 17:23:33.000000000 +0200
-+++ chef-11.8.0/lib/chef/config.rb	2013-12-21 17:24:18.980654855 +0200
+--- chef-11.8.0/lib/chef/config.rb	2013-12-21 17:24:18.980654855 +0200
++++ chef-11.8.2/lib/chef/config.rb	2013-12-21 20:00:26.000000000 +0200
 @@ -162,7 +162,7 @@
            end
          end
@@ -9,17 +9,6 @@
        end
      end
  
-@@ -260,7 +260,7 @@
-       if local_mode
-         "#{config_dir}local-mode-cache"
-       else
--        platform_specific_path("/var/chef")
-+        platform_specific_path("/var/cache/chef")
-       end
-     end
- 
---- chef-11.8.0/lib/chef/config.rb~	2013-12-21 17:25:17.000000000 +0200
-+++ chef-11.8.0/lib/chef/config.rb	2013-12-21 17:25:40.044358776 +0200
 @@ -201,7 +201,7 @@
  
      # Location of cookbooks on disk. String or array of strings.
@@ -29,6 +18,28 @@
      default(:cookbook_path) do
        if self.configuration[:chef_repo_path]
          derive_path_from_chef_repo_path('cookbooks')
+@@ -260,7 +260,7 @@
+       if local_mode
+         "#{config_dir}local-mode-cache"
+       else
+-        platform_specific_path("/var/chef")
++        platform_specific_path("/var/cache/chef")
+       end
+     end
+ 
+@@ -268,10 +268,10 @@
+     default(:checksum_path) { path_join(cache_path, "checksums") }
+ 
+     # Where chef's cache files should be stored
+-    default(:file_cache_path) { path_join(cache_path, "cache") }
++    default(:file_cache_path) { cache_path }
+ 
+     # Where backups of chef-managed files should go
+-    default(:file_backup_path) { path_join(cache_path, "backup") }
++    default(:file_backup_path) { '/var/lib/chef/backup' }
+ 
+     # The chef-client (or solo) lockfile.
+     #
 --- chef-11.8.0/lib/chef/handler/json_file.rb~	2013-12-21 17:25:17.000000000 +0200
 +++ chef-11.8.0/lib/chef/handler/json_file.rb	2013-12-21 17:25:58.665209433 +0200
 @@ -27,7 +27,7 @@
