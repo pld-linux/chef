@@ -5,7 +5,7 @@
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	11.8.2
-Release:	0.13
+Release:	0.14
 License:	Apache v2.0
 Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
@@ -60,10 +60,6 @@ Requires:	ruby-net-ssh >= 2.6
 Requires:	ruby-net-ssh-multi >= 1.1.0
 Requires:	ruby-ohai < 7
 Requires:	ruby-ohai >= 6.0
-Requires:	ruby-pry < 1
-Requires:	ruby-pry >= 0.9
-Requires:	ruby-puma < 2
-Requires:	ruby-puma >= 1.6
 Requires:	ruby-rest-client >= 1.0.4
 Requires:	ruby-rubygems
 Requires:	ruby-yajl >= 1.1
