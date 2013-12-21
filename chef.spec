@@ -4,12 +4,12 @@
 
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
-Version:	11.8.0
+Version:	11.8.2
 Release:	0.1
 License:	Apache v2.0
 Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
-# Source0-md5:	522cb7dfcff513a575f6c68493030584
+# Source0-md5:	7d3c2e8b98ec8df050d92686f1429d8f
 Source1:	%{name}.rb
 Source2:	%{name}.tmpfiles
 Patch0:		platform-pld.patch
@@ -92,6 +92,7 @@ install -d $RPM_BUILD_ROOT{%{ruby_vendorlibdir},%{_bindir},%{_mandir}/man1,%{sys
 cp -a lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
 cp -a bin/* $RPM_BUILD_ROOT%{_bindir}
 cp -a distro/common/man/* $RPM_BUILD_ROOT%{_mandir}
+%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/README.md
 
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/chef.rb
 cp -p %{SOURCE2} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
@@ -118,23 +119,30 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/knife-cookbook-site.1*
 %{_mandir}/man1/knife-cookbook.1*
 %{_mandir}/man1/knife-data-bag.1*
+%{_mandir}/man1/knife-delete.1*
+%{_mandir}/man1/knife-deps.1*
+%{_mandir}/man1/knife-diff.1*
+%{_mandir}/man1/knife-download.1*
+%{_mandir}/man1/knife-edit.1*
 %{_mandir}/man1/knife-environment.1*
 %{_mandir}/man1/knife-exec.1*
-%{_mandir}/man1/knife-index.1*
+%{_mandir}/man1/knife-index-rebuild.1*
+%{_mandir}/man1/knife-list.1*
 %{_mandir}/man1/knife-node.1*
+%{_mandir}/man1/knife-raw.1*
+%{_mandir}/man1/knife-recipe-list.1*
 %{_mandir}/man1/knife-role.1*
 %{_mandir}/man1/knife-search.1*
+%{_mandir}/man1/knife-show.1*
 %{_mandir}/man1/knife-ssh.1*
 %{_mandir}/man1/knife-status.1*
 %{_mandir}/man1/knife-tag.1*
+%{_mandir}/man1/knife-upload.1*
+%{_mandir}/man1/knife-user.1*
+%{_mandir}/man1/knife-xargs.1*
 %{_mandir}/man1/knife.1*
 %{_mandir}/man8/chef-client.8*
-%{_mandir}/man8/chef-expander.8*
-%{_mandir}/man8/chef-expanderctl.8*
-%{_mandir}/man8/chef-server-webui.8*
-%{_mandir}/man8/chef-server.8*
 %{_mandir}/man8/chef-solo.8*
-%{_mandir}/man8/chef-solr.8*
 %{ruby_vendorlibdir}/chef.rb
 %{ruby_vendorlibdir}/chef
 %{systemdtmpfilesdir}/chef.conf
