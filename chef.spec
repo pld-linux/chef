@@ -5,7 +5,7 @@
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	11.8.2
-Release:	0.1
+Release:	0.8
 License:	Apache v2.0
 Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
@@ -68,6 +68,17 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 A systems integration framework, built to bring the benefits of
 configuration management to your entire infrastructure.
 
+%package -n knife
+Summary:	knife - Chef Server API client utility
+Group:		Development/Languages
+Requires:	%{name} = %{version}-%{release}
+
+%description -n knife
+Knife is a command-line utility used to manage data on a Chef server
+through the HTTP(S) API. Knife is organized into groups of subcommands
+centered around the various object types in Chef. Each category of
+subcommand is documented in its own manual page.
+
 %prep
 %setup -q
 %patch0 -p1
@@ -110,9 +121,33 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/chef-service-manager
 %attr(755,root,root) %{_bindir}/chef-shell
 %attr(755,root,root) %{_bindir}/chef-solo
-%attr(755,root,root) %{_bindir}/knife
 %attr(755,root,root) %{_bindir}/shef
 %{_mandir}/man1/chef-shell.1*
+%{_mandir}/man8/chef-client.8*
+%{_mandir}/man8/chef-solo.8*
+%{ruby_vendorlibdir}/chef.rb
+%{ruby_vendorlibdir}/chef
+%exclude %{ruby_vendorlibdir}/chef/knife
+%exclude %{ruby_vendorlibdir}/chef/application/knife.rb
+%exclude %{ruby_vendorlibdir}/chef/chef_fs/knife.rb
+%exclude %{ruby_vendorlibdir}/chef/knife.rb
+%{systemdtmpfilesdir}/chef.conf
+
+%dir /var/lib/%{name}
+%dir /var/lib/%{name}/roles
+%dir /var/lib/%{name}/data_bags
+%dir /var/lib/%{name}/environments
+
+%dir /var/cache/%{name}
+%dir /var/run/%{name}
+
+%files -n knife
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/knife
+%{ruby_vendorlibdir}/chef/knife.rb
+%{ruby_vendorlibdir}/chef/knife
+%{ruby_vendorlibdir}/chef/application/knife.rb
+%{ruby_vendorlibdir}/chef/chef_fs/knife.rb
 %{_mandir}/man1/knife-bootstrap.1*
 %{_mandir}/man1/knife-client.1*
 %{_mandir}/man1/knife-configure.1*
@@ -141,16 +176,3 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/knife-user.1*
 %{_mandir}/man1/knife-xargs.1*
 %{_mandir}/man1/knife.1*
-%{_mandir}/man8/chef-client.8*
-%{_mandir}/man8/chef-solo.8*
-%{ruby_vendorlibdir}/chef.rb
-%{ruby_vendorlibdir}/chef
-%{systemdtmpfilesdir}/chef.conf
-
-%dir /var/lib/%{name}
-%dir /var/lib/%{name}/roles
-%dir /var/lib/%{name}/data_bags
-%dir /var/lib/%{name}/environments
-
-%dir /var/cache/%{name}
-%dir /var/run/%{name}
