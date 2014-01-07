@@ -1,5 +1,47 @@
---- chef-11.4.4.gem/lib/chef/handler/json_file.rb	2013-04-30 01:35:11.709938303 +0300
-+++ chef-11.4.4/lib/chef/handler/json_file.rb	2013-04-30 01:38:24.665295683 +0300
+--- chef-11.8.0/lib/chef/config.rb	2013-12-21 17:24:18.980654855 +0200
++++ chef-11.8.2/lib/chef/config.rb	2013-12-21 20:00:26.000000000 +0200
+@@ -162,7 +162,7 @@
+           end
+         end
+       else
+-        platform_specific_path("/var/chef")
++        platform_specific_path("/var/lib/chef")
+       end
+     end
+ 
+@@ -201,7 +201,7 @@
+ 
+     # Location of cookbooks on disk. String or array of strings.
+     # Defaults to <chef_repo_path>/cookbooks.  If chef_repo_path
+-    # is not specified, this is set to [/var/chef/cookbooks, /var/chef/site-cookbooks]).
++    # is not specified, this is set to [/var/lib/chef/cookbooks, /var/lib/chef/site-cookbooks]).
+     default(:cookbook_path) do
+       if self.configuration[:chef_repo_path]
+         derive_path_from_chef_repo_path('cookbooks')
+@@ -260,7 +260,7 @@
+       if local_mode
+         "#{config_dir}local-mode-cache"
+       else
+-        platform_specific_path("/var/chef")
++        platform_specific_path("/var/cache/chef")
+       end
+     end
+ 
+@@ -268,10 +268,10 @@
+     default(:checksum_path) { path_join(cache_path, "checksums") }
+ 
+     # Where chef's cache files should be stored
+-    default(:file_cache_path) { path_join(cache_path, "cache") }
++    default(:file_cache_path) { cache_path }
+ 
+     # Where backups of chef-managed files should go
+-    default(:file_backup_path) { path_join(cache_path, "backup") }
++    default(:file_backup_path) { '/var/lib/chef/backup' }
+ 
+     # The chef-client (or solo) lockfile.
+     #
+--- chef-11.8.0/lib/chef/handler/json_file.rb~	2013-12-21 17:25:17.000000000 +0200
++++ chef-11.8.0/lib/chef/handler/json_file.rb	2013-12-21 17:25:58.665209433 +0200
 @@ -27,7 +27,7 @@
  
        def initialize(config={})
@@ -8,86 +50,4 @@
 +        @config[:path] ||= "/var/lib/chef/reports"
          @config
        end
- 
---- chef-11.6.0/lib/chef/config.rb~	2013-08-18 18:27:57.000000000 +0300
-+++ chef-11.6.0/lib/chef/config.rb	2013-08-18 18:28:08.057227738 +0300
-@@ -123,17 +123,17 @@
- 
-     # Where the cookbooks are located. Meaning is somewhat context dependent between
-     # knife, chef-client, and chef-solo.
--    cookbook_path [ platform_specific_path("/var/chef/cookbooks"),
--                    platform_specific_path("/var/chef/site-cookbooks") ]
-+    cookbook_path [ platform_specific_path("/var/lib/chef/cookbooks"),
-+                    platform_specific_path("/var/lib/chef/site-cookbooks") ]
- 
-     # An array of paths to search for knife exec scripts if they aren't in the current directory
-     script_path []
- 
-     # Where cookbook files are stored on the server (by content checksum)
--    checksum_path "/var/chef/checksums"
-+    checksum_path "/var/lib/chef/checksums"
- 
-     # Where chef's cache files should be stored
--    file_cache_path platform_specific_path("/var/chef/cache")
-+    file_cache_path platform_specific_path("/var/cache/chef")
- 
-     # By default, chef-client (or solo) creates a lockfile in
-     # `file_cache_path`/chef-client-running.pid
-@@ -145,7 +145,7 @@
-     lockfile nil
- 
-     # Where backups of chef-managed files should go
--    file_backup_path platform_specific_path("/var/chef/backup")
-+    file_backup_path platform_specific_path("/var/lib/chef/backup")
- 
-     ## Daemonization Settings ##
-     # What user should Chef run as?
-@@ -207,11 +207,11 @@
-     ssl_ca_file nil
- 
-     # Where should chef-solo look for role files?
--    role_path platform_specific_path("/var/chef/roles")
-+    role_path platform_specific_path("/var/lib/chef/roles")
- 
--    data_bag_path platform_specific_path("/var/chef/data_bags")
-+    data_bag_path platform_specific_path("/var/lib/chef/data_bags")
- 
--    environment_path platform_specific_path("/var/chef/environments")
-+    environment_path platform_specific_path("/var/lib/chef/environments")
- 
-     # Where should chef-solo download recipes from?
-     recipe_url nil
-@@ -302,7 +302,7 @@
-     syntax_check_cache_path nil
- 
-     # Deprecated:
--    cache_options({ :path => platform_specific_path("/var/chef/cache/checksums") })
-+    cache_options({ :path => platform_specific_path("/var/cache/chef/checksums") })
- 
-     # Set to false to silence Chef 11 deprecation warnings:
-     chef11_deprecation_warnings true
---- chef-11.6.0/lib/chef/chef_fs/config.rb~	2013-08-18 18:28:38.000000000 +0300
-+++ chef-11.6.0/lib/chef/chef_fs/config.rb	2013-08-18 18:29:11.806714479 +0300
-@@ -158,17 +158,17 @@
- 
-       def configure_repo_paths
-         # Smooth out some (for now) inappropriate defaults set by Chef
--        if @chef_config[:cookbook_path] == [ @chef_config.platform_specific_path("/var/chef/cookbooks"),
--                      @chef_config.platform_specific_path("/var/chef/site-cookbooks") ]
-+        if @chef_config[:cookbook_path] == [ @chef_config.platform_specific_path("/var/lib/chef/cookbooks"),
-+                      @chef_config.platform_specific_path("/var/lib/chef/site-cookbooks") ]
-           @chef_config[:cookbook_path] = nil
-         end
--        if @chef_config[:data_bag_path] == @chef_config.platform_specific_path('/var/chef/data_bags')
-+        if @chef_config[:data_bag_path] == @chef_config.platform_specific_path('/var/lib/chef/data_bags')
-           @chef_config[:data_bag_path] = nil
-         end
--        if @chef_config[:node_path] == '/var/chef/node'
-+        if @chef_config[:node_path] == '/var/lib/chef/node'
-           @chef_config[:node_path] = nil
-         end
--        if @chef_config[:role_path] == @chef_config.platform_specific_path('/var/chef/roles')
-+        if @chef_config[:role_path] == @chef_config.platform_specific_path('/var/lib/chef/roles')
-           @chef_config[:role_path] = nil
-         end
  
