@@ -44,7 +44,6 @@ BuildRequires:	ruby-rspec-mocks >= 2.13.0
 #BuildRequires:	ruby-rspec_junit_formatter
 #BuildRequires:	ruby-sdoc
 %endif
-Requires:	iproute2
 Requires:	lsb-release
 Requires:	poldek >= 0.30
 Requires:	ruby >= 1:1.9.3.429-4
