@@ -121,8 +121,9 @@ rspec spec
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{ruby_vendorlibdir},%{_bindir},%{_mandir}/man1,%{systemdtmpfilesdir}} \
-	$RPM_BUILD_ROOT{%{_sysconfdir}/%{name},/var/{run/%{name},cache/%{name},lib/%{name}/{roles,data_bags,environments,backup}}}
+install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},%{_bindir},%{_mandir}/man1,%{systemdtmpfilesdir}} \
+	$RPM_BUILD_ROOT%{ruby_vendorlibdir}/chef/reporting \
+	$RPM_BUILD_ROOT/var/{run/%{name},cache/%{name},lib/%{name}/{roles,data_bags,environments,backup}}
 
 cp -a lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
 cp -a bin/* $RPM_BUILD_ROOT%{_bindir}
