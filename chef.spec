@@ -8,7 +8,7 @@
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	11.8.2
-Release:	2
+Release:	3
 License:	Apache v2.0
 Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
@@ -165,6 +165,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir /var/lib/%{name}/roles
 %dir /var/lib/%{name}/data_bags
 %dir /var/lib/%{name}/environments
+%dir %attr(750,root,root) /var/lib/%{name}/backup
 
 %dir /var/cache/%{name}
 %dir /var/run/%{name}
@@ -204,15 +205,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/knife-user.1*
 %{_mandir}/man1/knife-xargs.1*
 %{_mandir}/man1/knife.1*
-
-%dir /var/lib/%{name}
-%dir /var/lib/%{name}/roles
-%dir /var/lib/%{name}/data_bags
-%dir /var/lib/%{name}/environments
-%dir %attr(750,root,root) /var/lib/%{name}/backup
-
-%dir /var/cache/%{name}
-%dir /var/run/%{name}
 
 %files -n bash-completion-knife
 %defattr(644,root,root,755)
