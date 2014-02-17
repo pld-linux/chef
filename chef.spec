@@ -1,4 +1,3 @@
-#
 # NOTE:
 # - check releases here: https://github.com/opscode/chef/releases
 
@@ -7,12 +6,12 @@
 
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
-Version:	11.8.2
-Release:	3
+Version:	11.10.0
+Release:	1
 License:	Apache v2.0
 Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
-# Source0-md5:	7d3c2e8b98ec8df050d92686f1429d8f
+# Source0-md5:	ede47f0c92ad10bd08399228dbf1d8c7
 Source1:	%{name}.rb
 Source2:	%{name}.tmpfiles
 Source3:	https://raw.github.com/stevendanna/knife-hacks/master/shell/knife_completion.sh
@@ -28,47 +27,51 @@ BuildRequires:	rpm-rubyprov
 BuildRequires:	rpmbuild(macros) >= 1.673
 BuildRequires:	sed >= 4.0
 %if %{with tests}
-BuildRequires:	ruby-abstract
-BuildRequires:	ruby-mixlib-authentication >= 1.3.0
-BuildRequires:	ruby-net-ssh-multi >= 1.1.0
 BuildRequires:	ruby-rack
 BuildRequires:	ruby-rake
-#BuildRequires:	ruby-rdoc
-BuildRequires:	ruby-rest-client >= 1.0.4
-BuildRequires:	ruby-rspec-core < 2.14
-BuildRequires:	ruby-rspec-core >= 2.13.0
-BuildRequires:	ruby-rspec-expectations < 2.14
-BuildRequires:	ruby-rspec-expectations >= 2.13.0
-BuildRequires:	ruby-rspec-mocks < 2.14
-BuildRequires:	ruby-rspec-mocks >= 2.13.0
-#BuildRequires:	ruby-rspec_junit_formatter
-#BuildRequires:	ruby-sdoc
+BuildRequires:	ruby-rspec-core < 2.15
+BuildRequires:	ruby-rspec-core >= 2.14.0
+BuildRequires:	ruby-rspec-expectations < 2.15
+BuildRequires:	ruby-rspec-expectations >= 2.14.0
+BuildRequires:	ruby-rspec-mocks < 2.15
+BuildRequires:	ruby-rspec-mocks >= 2.14.0
+BuildRequires:	ruby-rspec_junit_formatter
 %endif
 Requires:	lsb-release
 Requires:	poldek >= 0.30
 Requires:	ruby >= 1:1.9.3.429-4
 Requires:	ruby-diff-lcs < 2
-Requires:	ruby-diff-lcs >= 1.2
 Requires:	ruby-diff-lcs >= 1.2.4
-Requires:	ruby-erubis
+Requires:	ruby-erubis < 3
+Requires:	ruby-erubis >= 2.7
+Requires:	ruby-highline < 2
 Requires:	ruby-highline >= 1.6.9
+Requires:	ruby-json <= 1.8.1
 Requires:	ruby-json >= 1.4.4
 Requires:	ruby-mime-types < 2
 Requires:	ruby-mime-types >= 1.16
-Requires:	ruby-mixlib-authentication >= 1.3.0
-Requires:	ruby-mixlib-cli >= 1.3.0
+Requires:	ruby-mixlib-authentication < 2
+Requires:	ruby-mixlib-authentication >= 1.3
+Requires:	ruby-mixlib-cli < 2
+Requires:	ruby-mixlib-cli >= 1.4
 Requires:	ruby-mixlib-config < 3
 Requires:	ruby-mixlib-config >= 2.0
-Requires:	ruby-mixlib-log >= 1.3.0
-Requires:	ruby-mixlib-shellout >= 1.2
+Requires:	ruby-mixlib-log < 2
+Requires:	ruby-mixlib-log >= 1.3
+Requires:	ruby-mixlib-shellout < 2
+Requires:	ruby-mixlib-shellout >= 1.3
+Requires:	ruby-net-ssh < 3
 Requires:	ruby-net-ssh >= 2.6
-Requires:	ruby-net-ssh-multi >= 1.1.0
+Requires:	ruby-net-ssh-multi < 2
+Requires:	ruby-net-ssh-multi >= 1.1
 Requires:	ruby-ohai < 7
 Requires:	ruby-ohai >= 6.0
+Requires:	ruby-rest-client < 1.7.0
 Requires:	ruby-rest-client >= 1.0.4
 Requires:	ruby-rubygems
+Requires:	ruby-yajl < 2
 Requires:	ruby-yajl >= 1.1
-Suggests:	chef-zero >= 1.6.2
+Suggests:	chef-zero >= 1.7
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -110,9 +113,12 @@ subcommand is documented in its own manual page.
 %patch2 -p1
 %patch3 -p1
 
-grep --exclude-dir=spec --exclude-dir=distro -r /var/chef . && exit 1
-
 %{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
+
+# cleanup backups after patching
+find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
+
+grep --exclude-dir=spec --exclude-dir=distro -r /var/chef . && exit 1
 
 %build
 %if %{with tests}
