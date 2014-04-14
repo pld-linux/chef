@@ -108,6 +108,7 @@ subcommand is documented in its own manual page.
 
 %prep
 %setup -q
+gzip -d metadata
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
