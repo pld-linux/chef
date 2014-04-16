@@ -9,7 +9,7 @@ Name:		chef
 Version:	11.12.2
 Release:	1
 License:	Apache v2.0
-Group:		Development/Languages
+Group:		Networking/Admin
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
 # Source0-md5:	40743d92b81c62abddd647912fcd31e3
 Source1:	%{name}.rb
@@ -97,7 +97,7 @@ Pakiet ten dostarcza bashowe uzupełnianie nazw dla knifea.
 
 %package -n knife
 Summary:	knife - Chef Server API client utility
-Group:		Development/Languages
+Group:		Networking/Admin
 Requires:	%{name} = %{version}-%{release}
 
 %description -n knife
