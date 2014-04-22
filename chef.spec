@@ -21,7 +21,7 @@ Patch1:		FHS.patch
 Patch2:		https://github.com/glensc/chef/compare/poldek.patch
 # Patch2-md5:	8fd92d572b7ebce759e9034097bfc399
 Patch3:		https://github.com/glensc/chef/compare/pld-knife-boostrap.patch
-# Patch3-md5:	bfc884469fad7b5aa46341402be5fccd
+# Patch3-md5:	8ff0fdfde6dc90018698775bf8f13062
 URL:		https://wiki.opscode.com/display/chef/
 BuildRequires:	rpm-rubyprov
 BuildRequires:	rpmbuild(macros) >= 1.673
