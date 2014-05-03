@@ -1,7 +1,7 @@
---- chef-11.6.0/lib/chef/platform/provider_mapping.rb~	2013-08-18 18:21:27.000000000 +0300
-+++ chef-11.6.0/lib/chef/platform/provider_mapping.rb	2013-08-18 18:25:27.133441297 +0300
-@@ -173,6 +173,15 @@
-               :ifconfig => Chef::Provider::Ifconfig::Redhat
+--- chef-11.12.2/lib/chef/platform/provider_mapping.rb	2014-05-03 16:17:20.832320849 +0300
++++ chef-11.12.2/lib/chef/platform/provider_mapping.rb	2014-05-03 16:16:41.990604626 +0300
+@@ -185,6 +185,16 @@
+               :group => Chef::Provider::Group::Usermod
              }
            },
 +          :pld => {
@@ -10,7 +10,8 @@
 +              :cron => Chef::Provider::Cron,
 +              :package => Chef::Provider::Package::Poldek,
 +              :mdadm => Chef::Provider::Mdadm,
-+              :ifconfig => Chef::Provider::Ifconfig::Redhat # TODO: PLD config path needed
++              :ifconfig => Chef::Provider::Ifconfig::Redhat, # TODO: PLD config path needed
++              :group => Chef::Provider::Group::Usermod,
 +            }
 +          },
            :suse     => {
