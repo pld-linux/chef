@@ -7,7 +7,7 @@
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	11.12.2
-Release:	4
+Release:	5
 License:	Apache v2.0
 Group:		Networking/Admin
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
@@ -43,7 +43,7 @@ Requires:	ruby >= 1:1.9.3.429-4
 Requires:	ruby-diff-lcs < 2
 Requires:	ruby-diff-lcs >= 1.2.4
 Requires:	ruby-erubis < 3
-Requires:	ruby-erubis >= 2.7
+Requires:	ruby-erubis >= 2.7.0-3
 Requires:	ruby-highline < 2
 Requires:	ruby-highline >= 1.6.9
 Requires:	ruby-json <= 1.8.1
@@ -51,7 +51,7 @@ Requires:	ruby-json >= 1.4.4
 Requires:	ruby-mime-types < 2
 Requires:	ruby-mime-types >= 1.16
 Requires:	ruby-mixlib-authentication < 2
-Requires:	ruby-mixlib-authentication >= 1.3
+Requires:	ruby-mixlib-authentication >= 1.3.0-2
 Requires:	ruby-mixlib-cli < 2
 Requires:	ruby-mixlib-cli >= 1.4
 Requires:	ruby-mixlib-config < 3
