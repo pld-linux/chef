@@ -7,7 +7,7 @@
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	11.12.2
-Release:	5
+Release:	6
 License:	Apache v2.0
 Group:		Networking/Admin
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
@@ -57,7 +57,7 @@ Requires:	ruby-mixlib-cli >= 1.4
 Requires:	ruby-mixlib-config < 3
 Requires:	ruby-mixlib-config >= 2.0
 Requires:	ruby-mixlib-log < 2
-Requires:	ruby-mixlib-log >= 1.3
+Requires:	ruby-mixlib-log >= 1.6.0-2
 Requires:	ruby-mixlib-shellout < 2
 Requires:	ruby-mixlib-shellout >= 1.4
 Requires:	ruby-net-ssh < 3
