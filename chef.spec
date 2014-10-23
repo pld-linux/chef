@@ -6,12 +6,12 @@
 
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
-Version:	11.12.2
-Release:	6
+Version:	11.12.8
+Release:	1
 License:	Apache v2.0
 Group:		Networking/Admin
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
-# Source0-md5:	40743d92b81c62abddd647912fcd31e3
+# Source0-md5:	e453d166d30ebc8d99b3a12d849612f7
 Source1:	%{name}.rb
 Source2:	%{name}.tmpfiles
 Source3:	https://raw.github.com/stevendanna/knife-hacks/master/shell/knife_completion.sh
