@@ -18,8 +18,7 @@ Source3:	https://raw.github.com/stevendanna/knife-hacks/master/shell/knife_compl
 # Source3-md5:	a4c1e41370be8088a59ddb3b2e7ea397
 Patch0:		platform-pld.patch
 Patch1:		FHS.patch
-Patch2:		https://github.com/glensc/chef/compare/poldek.patch
-# Patch2-md5:	8fd92d572b7ebce759e9034097bfc399
+Patch2:		poldek.patch
 Patch3:		https://github.com/glensc/chef/compare/pld-knife-boostrap.patch
 # Patch3-md5:	8ff0fdfde6dc90018698775bf8f13062
 URL:		https://wiki.opscode.com/display/chef/
