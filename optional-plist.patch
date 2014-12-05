@@ -1,0 +1,35 @@
+--- chef-11.14.6/lib/chef/provider/user/dscl.rb~	2014-12-05 12:56:20.000000000 +0200
++++ chef-11.14.6/lib/chef/provider/user/dscl.rb	2014-12-05 13:04:42.684470417 +0200
+@@ -19,7 +19,6 @@
+ require 'mixlib/shellout'
+ require 'chef/provider/user'
+ require 'openssl'
+-require 'plist'
+ 
+ class Chef
+   class Provider
+@@ -125,6 +124,8 @@
+ 
+               # Calling shell_out directly since we want to give an input stream
+               shadow_hash_xml = convert_binary_plist_to_xml(shadow_hash_binary.string)
++
++              require 'plist'
+               shadow_hash = Plist::parse_xml(shadow_hash_xml)
+ 
+               if shadow_hash["SALTED-SHA512"]
+@@ -558,6 +559,7 @@
+           begin
+             user_plist_file = "#{USER_PLIST_DIRECTORY}/#{@new_resource.username}.plist"
+             user_plist_info = run_plutil("convert xml1 -o - #{user_plist_file}")
++            require 'plist'
+             user_info = Plist::parse_xml(user_plist_info)
+           rescue Chef::Exceptions::PlistUtilCommandFailed
+           end
+@@ -571,6 +573,7 @@
+         #
+         def save_user_info(user_info)
+           user_plist_file = "#{USER_PLIST_DIRECTORY}/#{@new_resource.username}.plist"
++          require 'plist'
+           Plist::Emit.save_plist(user_info, user_plist_file)
+           run_plutil("convert binary1 #{user_plist_file}")
+         end
