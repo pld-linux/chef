@@ -6,12 +6,12 @@
 
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
-Version:	11.14.2
-Release:	0.1
+Version:	11.14.6
+Release:	1
 License:	Apache v2.0
 Group:		Networking/Admin
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
-# Source0-md5:	9eac2363456e27b02b2ad753d5b92085
+# Source0-md5:	0a7dbf9c3b7b9e285de034031faf008f
 Source1:	%{name}.rb
 Source2:	%{name}.tmpfiles
 Source3:	https://raw.github.com/stevendanna/knife-hacks/master/shell/knife_completion.sh
@@ -57,7 +57,6 @@ Requires:	ruby-mixlib-config < 3
 Requires:	ruby-mixlib-config >= 2.0
 Requires:	ruby-mixlib-log < 2
 Requires:	ruby-mixlib-log >= 1.6.0-2
-Requires:	ruby-mixlib-shellout < 2
 Requires:	ruby-mixlib-shellout >= 1.4
 Requires:	ruby-net-ssh < 3
 Requires:	ruby-net-ssh >= 2.6
