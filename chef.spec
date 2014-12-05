@@ -6,12 +6,12 @@
 
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
-Version:	11.12.8
-Release:	1
+Version:	11.14.2
+Release:	0.1
 License:	Apache v2.0
 Group:		Networking/Admin
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
-# Source0-md5:	e453d166d30ebc8d99b3a12d849612f7
+# Source0-md5:	9eac2363456e27b02b2ad753d5b92085
 Source1:	%{name}.rb
 Source2:	%{name}.tmpfiles
 Source3:	https://raw.github.com/stevendanna/knife-hacks/master/shell/knife_completion.sh
@@ -203,8 +203,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/knife-recipe-list.1*
 %{_mandir}/man1/knife-role.1*
 %{_mandir}/man1/knife-search.1*
+%{_mandir}/man1/knife-serve.1*
 %{_mandir}/man1/knife-show.1*
 %{_mandir}/man1/knife-ssh.1*
+%{_mandir}/man1/knife-ssl-check.1*
+%{_mandir}/man1/knife-ssl-fetch.1*
 %{_mandir}/man1/knife-status.1*
 %{_mandir}/man1/knife-tag.1*
 %{_mandir}/man1/knife-upload.1*

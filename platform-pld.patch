@@ -1,19 +1,19 @@
---- chef-11.12.2/lib/chef/platform/provider_mapping.rb	2014-05-03 16:17:20.832320849 +0300
-+++ chef-11.12.2/lib/chef/platform/provider_mapping.rb	2014-05-03 16:16:41.990604626 +0300
-@@ -185,6 +185,16 @@
-               :group => Chef::Provider::Group::Usermod
-             }
-           },
-+          :pld => {
-+            :default => {
-+              :service => Chef::Provider::Service::Redhat,
-+              :cron => Chef::Provider::Cron,
-+              :package => Chef::Provider::Package::Poldek,
-+              :mdadm => Chef::Provider::Mdadm,
-+              :ifconfig => Chef::Provider::Ifconfig::Redhat, # TODO: PLD config path needed
-+              :group => Chef::Provider::Group::Usermod,
-+            }
-+          },
-           :suse     => {
-             :default => {
-               :service => Chef::Provider::Service::Redhat,
+--- chef-11.14.2/lib/chef/platform/provider_mapping.rb~	2014-12-04 18:02:46.000000000 +0200
++++ chef-11.14.2/lib/chef/platform/provider_mapping.rb	2014-12-04 18:07:26.765336890 +0200
+@@ -194,6 +194,16 @@
+                 :group => Chef::Provider::Group::Suse
+               }
+             },
++            :pld => {
++              :default => {
++                :service => Chef::Provider::Service::Redhat,
++                :cron => Chef::Provider::Cron,
++                :package => Chef::Provider::Package::Poldek,
++                :mdadm => Chef::Provider::Mdadm,
++                :ifconfig => Chef::Provider::Ifconfig::Redhat, # TODO: PLD config path needed
++                :group => Chef::Provider::Group::Usermod,
++              }
++            },
+             :oracle  => {
+               :default => {
+                 :service => Chef::Provider::Service::Redhat,

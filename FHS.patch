@@ -1,15 +1,6 @@
---- chef-11.8.0/lib/chef/config.rb	2013-12-21 17:24:18.980654855 +0200
-+++ chef-11.8.2/lib/chef/config.rb	2013-12-21 20:00:26.000000000 +0200
-@@ -162,7 +162,7 @@
-           end
-         end
-       else
--        platform_specific_path("/var/chef")
-+        platform_specific_path("/var/lib/chef")
-       end
-     end
- 
-@@ -201,7 +201,7 @@
+--- chef-11.14.2/lib/chef/config.rb	2014-12-04 18:09:43.557089359 +0200
++++ chef-11.14.2/lib/chef/config.rb	2014-12-04 18:40:15.075764026 +0200
+@@ -181,7 +181,7 @@
  
      # Location of cookbooks on disk. String or array of strings.
      # Defaults to <chef_repo_path>/cookbooks.  If chef_repo_path
@@ -18,15 +9,19 @@
      default(:cookbook_path) do
        if self.configuration[:chef_repo_path]
          derive_path_from_chef_repo_path('cookbooks')
-@@ -260,7 +260,7 @@
-       if local_mode
+@@ -241,9 +241,9 @@
          "#{config_dir}local-mode-cache"
        else
--        platform_specific_path("/var/chef")
-+        platform_specific_path("/var/cache/chef")
-       end
-     end
- 
+         primary_cache_root = platform_specific_path("/var")
+-        primary_cache_path = platform_specific_path("/var/chef")
+-        # Use /var/chef as the cache path only if that folder exists and we can read and write
+-        # into it, or /var exists and we can read and write into it (we'll create /var/chef later).
++        primary_cache_path = platform_specific_path("/var/cache/chef")
++        # Use /var/cache/chef as the cache path only if that folder exists and we can read and write
++        # into it, or /var exists and we can read and write into it (we'll create /var/cache/chef later).
+         # Otherwise, we'll create .chef under the user's home directory and use that as
+         # the cache path.
+         unless path_accessible?(primary_cache_path) || path_accessible?(primary_cache_root)
 @@ -268,10 +268,10 @@
      default(:checksum_path) { path_join(cache_path, "checksums") }
  

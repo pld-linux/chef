@@ -129,16 +129,16 @@ https://github.com/opscode/chef/pull/1225
 +    end
 +  end
 +end
---- chef-11.12.8/lib/chef/providers.rb	2014-12-04 18:27:52.686448859 +0200
-+++ chef-11.12.8.poldek/lib/chef/providers.rb	2014-12-04 18:27:24.438414927 +0200
-@@ -60,6 +60,7 @@
+--- chef-11.14.2/lib/chef/providers.rb~	2014-12-04 18:38:06.000000000 +0200
++++ chef-11.14.2/lib/chef/providers.rb	2014-12-04 18:38:39.567794339 +0200
+@@ -62,6 +62,7 @@
  require 'chef/provider/package/macports'
  require 'chef/provider/package/pacman'
  require 'chef/provider/package/portage'
 +require 'chef/provider/package/poldek'
+ require 'chef/provider/package/paludis'
  require 'chef/provider/package/rpm'
  require 'chef/provider/package/rubygems'
- require 'chef/provider/package/yum'
 --- chef-11.12.8/lib/chef/resource/poldek_package.rb	1970-01-01 02:00:00.000000000 +0200
 +++ chef-11.12.8.poldek/lib/chef/resource/poldek_package.rb	2014-12-04 18:27:24.438414927 +0200
 @@ -0,0 +1,34 @@
