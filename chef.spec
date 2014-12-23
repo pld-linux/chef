@@ -6,12 +6,12 @@
 
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
-Version:	11.14.6
+Version:	11.16.4
 Release:	1
 License:	Apache v2.0
 Group:		Networking/Admin
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
-# Source0-md5:	0a7dbf9c3b7b9e285de034031faf008f
+# Source0-md5:	084038481d60dc6311284e3a4ab22a2d
 Source1:	%{name}.rb
 Source2:	%{name}.tmpfiles
 Source3:	https://raw.github.com/stevendanna/knife-hacks/master/shell/knife_completion.sh
@@ -44,6 +44,8 @@ Requires:	ruby-diff-lcs < 2
 Requires:	ruby-diff-lcs >= 1.2.4
 Requires:	ruby-erubis < 3
 Requires:	ruby-erubis >= 2.7.0-3
+Requires:	ruby-ffi-yajl < 2
+Requires:	ruby-ffi-yajl >= 1.0
 Requires:	ruby-highline < 2
 Requires:	ruby-highline >= 1.6.9
 Requires:	ruby-json <= 1.8.1
@@ -65,12 +67,11 @@ Requires:	ruby-net-ssh-multi < 2
 Requires:	ruby-net-ssh-multi >= 1.1
 Requires:	ruby-ohai < 8
 Requires:	ruby-ohai >= 6.0
-Requires:	ruby-rest-client < 1.7.0
 Requires:	ruby-rest-client >= 1.0.4
 Requires:	ruby-rubygems
 Requires:	ruby-yajl < 2
 Requires:	ruby-yajl >= 1.1
-Suggests:	chef-zero >= 2.0
+Suggests:	chef-zero >= 2.1.4
 Suggests:	ruby-plist >= 3.1.0
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
