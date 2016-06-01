@@ -152,11 +152,10 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_sysconfdir}/%{name}
 %attr(755,root,root) %{_bindir}/chef-apply
 %attr(755,root,root) %{_bindir}/chef-client
-%attr(755,root,root) %{_bindir}/chef-service-manager
 %attr(755,root,root) %{_bindir}/chef-shell
 %attr(755,root,root) %{_bindir}/chef-solo
-%attr(755,root,root) %{_bindir}/shef
 %{_mandir}/man1/chef-shell.1*
+%{_mandir}/man8/chef-apply.8*
 %{_mandir}/man8/chef-client.8*
 %{_mandir}/man8/chef-solo.8*
 %{ruby_vendorlibdir}/chef.rb
