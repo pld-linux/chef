@@ -8,7 +8,7 @@
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	12.10.24
-Release:	0.3
+Release:	0.4
 License:	Apache v2.0
 Group:		Networking/Admin
 Source0:	https://github.com/chef/chef/archive/v%{version}/%{name}-%{version}.tar.gz
@@ -41,37 +41,18 @@ Requires:	lsb-release
 Requires:	poldek >= 0.30
 Requires:	ruby >= 1:1.9.3.429-4
 Requires:	ruby-chef-config = %{version}-%{release}
-Requires:	ruby-diff-lcs < 2
-Requires:	ruby-diff-lcs >= 1.2.4
-Requires:	ruby-erubis < 3
 Requires:	ruby-erubis >= 2.7.0-3
-Requires:	ruby-ffi-yajl < 2
-Requires:	ruby-ffi-yajl >= 1.0
-Requires:	ruby-highline < 2
-Requires:	ruby-highline >= 1.6.9
 Requires:	ruby-json <= 1.8.1
 Requires:	ruby-json >= 1.4.4
 Requires:	ruby-mime-types < 2
 Requires:	ruby-mime-types >= 1.16
-Requires:	ruby-mixlib-authentication < 2
 Requires:	ruby-mixlib-authentication >= 1.3.0-2
-Requires:	ruby-mixlib-cli < 2
-Requires:	ruby-mixlib-cli >= 1.4
 Requires:	ruby-mixlib-config < 3
 Requires:	ruby-mixlib-config >= 2.0
-Requires:	ruby-mixlib-log < 2
 Requires:	ruby-mixlib-log >= 1.6.0-2
-Requires:	ruby-mixlib-shellout >= 1.4
-Requires:	ruby-net-ssh < 3
-Requires:	ruby-net-ssh >= 2.6
-Requires:	ruby-net-ssh-multi < 2
-Requires:	ruby-net-ssh-multi >= 1.1
-Requires:	ruby-ohai < 8
-Requires:	ruby-ohai >= 6.0
+Requires:	ruby-ohai < 9
 Requires:	ruby-rest-client >= 1.0.4
 Requires:	ruby-rubygems
-Requires:	ruby-yajl < 2
-Requires:	ruby-yajl >= 1.1
 Suggests:	chef-zero >= 2.1.4
 Suggests:	ruby-plist >= 3.1.0
 BuildArch:	noarch
@@ -87,12 +68,6 @@ configuration management to your entire infrastructure.
 %package -n ruby-chef-config
 Summary:	Chef's default configuration and config loading
 Group:		Development/Languages
-Requires:	ruby-fuzzyurl < 0.9
-Requires:	ruby-fuzzyurl >= 0.8.0
-Requires:	ruby-mixlib-config < 3
-Requires:	ruby-mixlib-config >= 2.0
-Requires:	ruby-mixlib-shellout < 3
-Requires:	ruby-mixlib-shellout >= 2.0
 
 %description -n ruby-chef-config
 Chef's default configuration and config loading.
