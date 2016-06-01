@@ -1,35 +1,34 @@
---- chef-11.14.6/lib/chef/provider/user/dscl.rb~	2014-12-05 12:56:20.000000000 +0200
-+++ chef-11.14.6/lib/chef/provider/user/dscl.rb	2014-12-05 13:04:42.684470417 +0200
+--- chef-12.10.24/lib/chef/provider/user/dscl.rb~	2016-06-01 23:58:45.000000000 +0300
++++ chef-12.10.24/lib/chef/provider/user/dscl.rb	2016-06-02 00:00:22.479841208 +0300
 @@ -19,7 +19,6 @@
- require 'mixlib/shellout'
- require 'chef/provider/user'
- require 'openssl'
--require 'plist'
+ require "mixlib/shellout"
+ require "chef/provider/user"
+ require "openssl"
+-require "plist"
+ require "chef/util/path_helper"
  
  class Chef
-   class Provider
-@@ -125,6 +124,8 @@
+@@ -130,6 +129,7 @@
  
                # Calling shell_out directly since we want to give an input stream
                shadow_hash_xml = convert_binary_plist_to_xml(shadow_hash_binary.string)
-+
-+              require 'plist'
-               shadow_hash = Plist::parse_xml(shadow_hash_xml)
++              require "plist"
+               shadow_hash = Plist.parse_xml(shadow_hash_xml)
  
                if shadow_hash["SALTED-SHA512"]
-@@ -558,6 +559,7 @@
+@@ -589,6 +589,7 @@
            begin
-             user_plist_file = "#{USER_PLIST_DIRECTORY}/#{@new_resource.username}.plist"
+             user_plist_file = "#{USER_PLIST_DIRECTORY}/#{new_resource.username}.plist"
              user_plist_info = run_plutil("convert xml1 -o - #{user_plist_file}")
-+            require 'plist'
-             user_info = Plist::parse_xml(user_plist_info)
++            require "plist"
+             user_info = Plist.parse_xml(user_plist_info)
            rescue Chef::Exceptions::PlistUtilCommandFailed
            end
-@@ -571,6 +573,7 @@
+@@ -601,6 +602,7 @@
+         # in DSCL_PROPERTY_MAP to the disk.
          #
          def save_user_info(user_info)
-           user_plist_file = "#{USER_PLIST_DIRECTORY}/#{@new_resource.username}.plist"
-+          require 'plist'
++          require "plist"
+           user_plist_file = "#{USER_PLIST_DIRECTORY}/#{new_resource.username}.plist"
            Plist::Emit.save_plist(user_info, user_plist_file)
            run_plutil("convert binary1 #{user_plist_file}")
-         end

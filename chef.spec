@@ -109,7 +109,7 @@ subcommand is documented in its own manual page.
 %prep
 %setup -q
 gzip -d metadata
-%patch0 -p1
+#%patch0 -p1 # UPDATE
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
