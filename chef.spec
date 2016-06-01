@@ -1,5 +1,6 @@
 # NOTE:
-# - check releases here: https://github.com/opscode/chef/releases
+# - check releases here: https://downloads.chef.io/chef-client/debian/
+#   the versions tagged in github are somewhat newer, perhaps dev-releases
 
 # Conditional build:
 %bcond_with	tests		# build without tests
@@ -7,13 +8,11 @@
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	12.10.24
-Release:	0.1
+Release:	0.2
 License:	Apache v2.0
 Group:		Networking/Admin
-Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
-# Source0-md5:	43819ee38d7cb40ea5578b74d87af1c7
-Source1:	http://rubygems.org/downloads/%{name}-config-%{version}.gem
-# Source1-md5:	c0515424c9122e4e0c561d6a4b267123
+Source0:	https://github.com/chef/chef/archive/v%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	2390cdbde7445ccc288992401ed62f08
 Source2:	%{name}.tmpfiles
 Source3:	https://raw.github.com/stevendanna/knife-hacks/master/shell/knife_completion.sh
 # Source3-md5:	a4c1e41370be8088a59ddb3b2e7ea397
@@ -123,15 +122,7 @@ centered around the various object types in Chef. Each category of
 subcommand is documented in its own manual page.
 
 %prep
-# chef-config
-%setup -qcT -a1
-set -- *
-install -d chef-config
-mv "$@" chef-config
-# chef
-%setup -qcTD -a0
-gzip -d metadata
-
+%setup -q
 #%patch0 -p1 # UPDATE
 %patch1 -p1
 %patch2 -p1
@@ -140,10 +131,16 @@ gzip -d metadata
 
 %{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
 
+%ifos linux
+# those do not match s.executables from .gemspec
+rm bin/chef-service-manager
+rm bin/chef-windows-service
+%endif
+
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
-grep --exclude-dir=spec --exclude-dir=distro -r /var/chef . && exit 1
+grep --exclude-dir=spec --exclude-dir=distro --exclude=CHANGELOG.md -r /var/chef . && exit 1
 
 %build
 %if %{with tests}
