@@ -12,6 +12,8 @@ License:	Apache v2.0
 Group:		Networking/Admin
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
 # Source0-md5:	43819ee38d7cb40ea5578b74d87af1c7
+Source1:	http://rubygems.org/downloads/%{name}-config-%{version}.gem
+# Source1-md5:	c0515424c9122e4e0c561d6a4b267123
 Source2:	%{name}.tmpfiles
 Source3:	https://raw.github.com/stevendanna/knife-hacks/master/shell/knife_completion.sh
 # Source3-md5:	a4c1e41370be8088a59ddb3b2e7ea397
@@ -39,6 +41,7 @@ BuildRequires:	ruby-rspec_junit_formatter
 Requires:	lsb-release
 Requires:	poldek >= 0.30
 Requires:	ruby >= 1:1.9.3.429-4
+Requires:	ruby-chef-config = %{version}-%{release}
 Requires:	ruby-diff-lcs < 2
 Requires:	ruby-diff-lcs >= 1.2.4
 Requires:	ruby-erubis < 3
@@ -82,6 +85,19 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 A systems integration framework, built to bring the benefits of
 configuration management to your entire infrastructure.
 
+%package -n ruby-chef-config
+Summary:	Chef's default configuration and config loading
+Group:		Development/Languages
+Requires:	ruby-fuzzyurl < 0.9
+Requires:	ruby-fuzzyurl >= 0.8.0
+Requires:	ruby-mixlib-config < 3
+Requires:	ruby-mixlib-config >= 2.0
+Requires:	ruby-mixlib-shellout < 3
+Requires:	ruby-mixlib-shellout >= 2.0
+
+%description -n ruby-chef-config
+Chef's default configuration and config loading.
+
 %package -n bash-completion-knife
 Summary:	bash-completion for knife
 Summary(pl.UTF-8):	bashowe uzupełnianie nazw dla knifea
@@ -107,8 +123,15 @@ centered around the various object types in Chef. Each category of
 subcommand is documented in its own manual page.
 
 %prep
-%setup -q
+# chef-config
+%setup -qcT -a1
+set -- *
+install -d chef-config
+mv "$@" chef-config
+# chef
+%setup -qcTD -a0
 gzip -d metadata
+
 #%patch0 -p1 # UPDATE
 %patch1 -p1
 %patch2 -p1
@@ -133,10 +156,14 @@ install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},%{_bindir},%{_mandir}/man1,%{s
 	$RPM_BUILD_ROOT%{ruby_vendorlibdir}/chef/reporting \
 	$RPM_BUILD_ROOT/var/{run/%{name},cache/%{name},lib/%{name}/{roles,data_bags,environments,reports,backup}}
 
+# chef
 cp -a lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
 cp -a bin/* $RPM_BUILD_ROOT%{_bindir}
 cp -a distro/common/man/* $RPM_BUILD_ROOT%{_mandir}
 %{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/README.md
+
+# chef-config
+cp -a chef-config/lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
 
 cp -p %{SOURCE2} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
@@ -175,6 +202,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %dir /var/cache/%{name}
 %dir /var/run/%{name}
+
+%files -n ruby-chef-config
+%defattr(644,root,root,755)
+%{ruby_vendorlibdir}/chef-config.rb
+%{ruby_vendorlibdir}/chef-config
 
 %files -n knife
 %defattr(644,root,root,755)
