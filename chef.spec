@@ -22,6 +22,7 @@ Patch2:		poldek.patch
 Patch3:		https://github.com/glensc/chef/compare/pld-knife-boostrap.patch
 # Patch3-md5:	8ff0fdfde6dc90018698775bf8f13062
 Patch4:		optional-plist.patch
+Patch5:		gemdeps.patch
 URL:		https://wiki.opscode.com/display/chef/
 BuildRequires:	rpm-rubyprov
 BuildRequires:	rpmbuild(macros) >= 1.673
@@ -103,6 +104,7 @@ subcommand is documented in its own manual page.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
 
