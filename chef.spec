@@ -8,7 +8,7 @@
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	12.10.24
-Release:	0.2
+Release:	0.3
 License:	Apache v2.0
 Group:		Networking/Admin
 Source0:	https://github.com/chef/chef/archive/v%{version}/%{name}-%{version}.tar.gz
@@ -143,24 +143,34 @@ find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 grep --exclude-dir=spec --exclude-dir=distro --exclude=CHANGELOG.md -r /var/chef . && exit 1
 
 %build
+# make gemspec self-contained
+%__gem_helper spec-dump %{name}.gemspec
+
 %if %{with tests}
 rspec spec
 %endif
+
+cd chef-config
+# make gemspec self-contained
+%__gem_helper spec-dump %{name}-config.gemspec
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},%{_bindir},%{_mandir}/man1,%{systemdtmpfilesdir}} \
 	$RPM_BUILD_ROOT%{ruby_vendorlibdir}/chef/reporting \
+	$RPM_BUILD_ROOT%{ruby_specdir} \
 	$RPM_BUILD_ROOT/var/{run/%{name},cache/%{name},lib/%{name}/{roles,data_bags,environments,reports,backup}}
 
 # chef
 cp -a lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
 cp -a bin/* $RPM_BUILD_ROOT%{_bindir}
 cp -a distro/common/man/* $RPM_BUILD_ROOT%{_mandir}
+cp -p chef-%{version}.gemspec $RPM_BUILD_ROOT%{ruby_specdir}
 %{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/README.md
 
 # chef-config
 cp -a chef-config/lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
+cp -p chef-config/chef-config-%{version}.gemspec $RPM_BUILD_ROOT%{ruby_specdir}
 
 cp -p %{SOURCE2} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
@@ -184,6 +194,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/chef-solo.8*
 %{ruby_vendorlibdir}/chef.rb
 %{ruby_vendorlibdir}/chef
+%{ruby_specdir}/chef-%{version}.gemspec
 %exclude %{ruby_vendorlibdir}/chef/knife
 %exclude %{ruby_vendorlibdir}/chef/application/knife.rb
 %exclude %{ruby_vendorlibdir}/chef/chef_fs/knife.rb
@@ -204,6 +215,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{ruby_vendorlibdir}/chef-config.rb
 %{ruby_vendorlibdir}/chef-config
+%{ruby_specdir}/chef-config-%{version}.gemspec
 
 %files -n knife
 %defattr(644,root,root,755)
