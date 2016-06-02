@@ -1,6 +1,6 @@
---- chef-12.10.24/chef.gemspec	2016-06-02 19:54:04.001988520 +0300
-+++ chef-12.10.24/chef.gemspec	2016-06-02 22:12:49.407279113 +0300
-@@ -31,16 +31,6 @@
+--- chef-12.10.24/chef.gemspec	2016-06-02 22:12:49.407279113 +0300
++++ chef-12.10.24/chef.gemspec	2016-06-02 22:28:11.841446131 +0300
+@@ -31,25 +31,11 @@
    s.add_dependency "erubis", "~> 2.7"
    s.add_dependency "diff-lcs", "~> 1.2", ">= 1.2.4"
  
@@ -16,4 +16,13 @@
 -
    s.add_dependency "syslog-logger", "~> 1.6"
    s.add_dependency "uuidtools", "~> 2.1.5"
+ 
+   s.add_dependency "proxifier", "~> 1.0"
+ 
+-  # v1.10 is needed as a runtime dep now for 'bundler/inline'
+-  # very deliberately avoiding putting a ceiling on this to avoid depsolver conflicts.
+-  s.add_dependency "bundler", ">= 1.10"
+-
+   s.bindir       = "bin"
+   s.executables  = %w{ chef-client chef-solo knife chef-shell chef-apply }
  
