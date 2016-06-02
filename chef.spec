@@ -114,6 +114,9 @@ rm bin/chef-service-manager
 rm bin/chef-windows-service
 %endif
 
+# don't package this, a maintainer's rake task
+rm chef-config/lib/chef-config/package_task.rb
+
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
