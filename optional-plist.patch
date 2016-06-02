@@ -32,3 +32,21 @@
            user_plist_file = "#{USER_PLIST_DIRECTORY}/#{new_resource.username}.plist"
            Plist::Emit.save_plist(user_info, user_plist_file)
            run_plutil("convert binary1 #{user_plist_file}")
+--- ./lib/chef/provider/launchd.rb~	2016-04-27 20:57:14.000000000 +0300
++++ ./lib/chef/provider/launchd.rb	2016-06-02 22:33:01.049679641 +0300
+@@ -21,7 +21,6 @@
+ require "chef/resource/file"
+ require "chef/resource/cookbook_file"
+ require "chef/resource/macosx_service"
+-require "plist"
+ require "forwardable"
+ 
+ class Chef
+@@ -150,6 +149,7 @@
+       end
+ 
+       def content
++        require "plist"
+         plist_hash = new_resource.hash || gen_hash
+         Plist::Emit.dump(plist_hash) unless plist_hash.nil?
+       end
