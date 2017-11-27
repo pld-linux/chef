@@ -7,7 +7,7 @@
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	11.16.4
-Release:	2
+Release:	3
 License:	Apache v2.0
 Group:		Networking/Admin
 Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
@@ -47,7 +47,7 @@ Requires:	ruby-ffi-yajl < 2
 Requires:	ruby-ffi-yajl >= 1.0
 Requires:	ruby-highline < 2
 Requires:	ruby-highline >= 1.6.9
-Requires:	ruby-json <= 1.8.1
+Requires:	ruby-json <= 1.8.3.1
 Requires:	ruby-json >= 1.4.4
 Requires:	ruby-mime-types < 2
 Requires:	ruby-mime-types >= 1.16
