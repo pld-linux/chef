@@ -21,7 +21,7 @@ Patch2:		poldek.patch
 Patch3:		https://github.com/glensc/chef/compare/pld-knife-boostrap.patch
 # Patch3-md5:	8ff0fdfde6dc90018698775bf8f13062
 Patch4:		optional-plist.patch
-URL:		https://wiki.opscode.com/display/chef/
+URL:		https://www.chef.io/
 BuildRequires:	rpm-rubyprov
 BuildRequires:	rpmbuild(macros) >= 1.673
 BuildRequires:	sed >= 4.0
