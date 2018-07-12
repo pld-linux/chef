@@ -6,12 +6,12 @@
 
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
-Version:	11.16.4
-Release:	3
+Version:	14.1.21
+Release:	0.1
 License:	Apache v2.0
 Group:		Networking/Admin
-Source0:	http://rubygems.org/downloads/%{name}-%{version}.gem
-# Source0-md5:	084038481d60dc6311284e3a4ab22a2d
+Source0:	https://github.com/chef/chef/archive/v%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	b67966a9b9e6c0a5947a604239267415
 Source2:	%{name}.tmpfiles
 Source3:	https://raw.github.com/stevendanna/knife-hacks/master/shell/knife_completion.sh
 # Source3-md5:	a4c1e41370be8088a59ddb3b2e7ea397
@@ -19,7 +19,7 @@ Patch0:		platform-pld.patch
 Patch1:		FHS.patch
 Patch2:		poldek.patch
 Patch3:		https://github.com/glensc/chef/compare/pld-knife-boostrap.patch
-# Patch3-md5:	8ff0fdfde6dc90018698775bf8f13062
+# Patch3-md5:	9bc4b39952e6bc326b16207cd6a59141
 Patch4:		optional-plist.patch
 URL:		https://www.chef.io/
 BuildRequires:	rpm-rubyprov
@@ -38,40 +38,54 @@ BuildRequires:	ruby-rspec_junit_formatter
 %endif
 Requires:	lsb-release
 Requires:	poldek >= 0.30
-Requires:	ruby >= 1:1.9.3.429-4
+Requires:	ruby >= 1:2.4.0
 Requires:	ruby-diff-lcs < 2
 Requires:	ruby-diff-lcs >= 1.2.4
 Requires:	ruby-erubis < 3
 Requires:	ruby-erubis >= 2.7.0-3
-Requires:	ruby-ffi-yajl < 2
-Requires:	ruby-ffi-yajl >= 1.0
+Requires:	ruby-ffi < 1.9.22
+Requires:	ruby-ffi-yajl >= 2.2
 Requires:	ruby-highline < 2
 Requires:	ruby-highline >= 1.6.9
 Requires:	ruby-json <= 1.8.3.1
 Requires:	ruby-json >= 1.4.4
 Requires:	ruby-mime-types < 2
 Requires:	ruby-mime-types >= 1.16
-Requires:	ruby-mixlib-authentication < 2
-Requires:	ruby-mixlib-authentication >= 1.3.0-2
+Requires:	ruby-mixlib-authentication >= 2.0
 Requires:	ruby-mixlib-cli < 2
-Requires:	ruby-mixlib-cli >= 1.4
+Requires:	ruby-mixlib-cli >= 1.7
 Requires:	ruby-mixlib-config < 3
 Requires:	ruby-mixlib-config >= 2.0
-Requires:	ruby-mixlib-log < 2
-Requires:	ruby-mixlib-log >= 1.6.0-2
-Requires:	ruby-mixlib-shellout >= 1.4
-Requires:	ruby-net-ssh < 3
-Requires:	ruby-net-ssh >= 2.6
+Requires:	ruby-mixlib-log >= 2.0.3
+Requires:	ruby-mixlib-shellout >= 2.0
+Requires:	ruby-net-ssh >= 4.2
 Requires:	ruby-net-ssh-multi < 2
-Requires:	ruby-net-ssh-multi >= 1.1
-Requires:	ruby-ohai < 8
-Requires:	ruby-ohai >= 6.0
+Requires:	ruby-net-ssh-multi >= 1.2.1
+Requires:	ruby-ohai >= 14.0
 Requires:	ruby-rest-client >= 1.0.4
 Requires:	ruby-rubygems
 Requires:	ruby-yajl < 2
 Requires:	ruby-yajl >= 1.1
 Suggests:	chef-zero >= 2.1.4
 Suggests:	ruby-plist >= 3.1.0
+#addressable >= 0
+#bundler >= 1.10
+#chef-config = 14.1.12
+#chef-zero >= 13.0
+#iniparse ~> 1.4
+#iso8601 ~> 0.9.1
+#mixlib-archive ~> 0.4
+#net-sftp >= 2.1.2, ~> 2.1
+#plist ~> 3.2
+#proxifier ~> 1.0
+#rspec-core ~> 3.5
+#rspec-expectations ~> 3.5
+#rspec_junit_formatter ~> 0.2.0
+#rspec-mocks ~> 3.5
+#serverspec ~> 2.7
+#specinfra ~> 2.10
+#syslog-logger ~> 1.6
+#uuidtools ~> 2.1.5
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -108,19 +122,18 @@ subcommand is documented in its own manual page.
 
 %prep
 %setup -q
-gzip -d metadata
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
+#%patch0 -p1
+#%patch1 -p1
+#%patch2 -p1
+#%patch3 -p1
+#%patch4 -p1
 
 %{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
-grep --exclude-dir=spec --exclude-dir=distro -r /var/chef . && exit 1
+#grep --exclude-dir=spec --exclude-dir=distro -r /var/chef . && exit 1
 
 %build
 %if %{with tests}
@@ -135,8 +148,6 @@ install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},%{_bindir},%{_mandir}/man1,%{s
 
 cp -a lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
 cp -a bin/* $RPM_BUILD_ROOT%{_bindir}
-cp -a distro/common/man/* $RPM_BUILD_ROOT%{_mandir}
-%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/README.md
 
 cp -p %{SOURCE2} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
@@ -152,13 +163,11 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_sysconfdir}/%{name}
 %attr(755,root,root) %{_bindir}/chef-apply
 %attr(755,root,root) %{_bindir}/chef-client
+%attr(755,root,root) %{_bindir}/chef-resource-inspector
 %attr(755,root,root) %{_bindir}/chef-service-manager
 %attr(755,root,root) %{_bindir}/chef-shell
 %attr(755,root,root) %{_bindir}/chef-solo
-%attr(755,root,root) %{_bindir}/shef
-%{_mandir}/man1/chef-shell.1*
-%{_mandir}/man8/chef-client.8*
-%{_mandir}/man8/chef-solo.8*
+%attr(755,root,root) %{_bindir}/chef-windows-service
 %{ruby_vendorlibdir}/chef.rb
 %{ruby_vendorlibdir}/chef
 %exclude %{ruby_vendorlibdir}/chef/knife
@@ -183,37 +192,6 @@ rm -rf $RPM_BUILD_ROOT
 %{ruby_vendorlibdir}/chef/knife
 %{ruby_vendorlibdir}/chef/application/knife.rb
 %{ruby_vendorlibdir}/chef/chef_fs/knife.rb
-%{_mandir}/man1/knife-bootstrap.1*
-%{_mandir}/man1/knife-client.1*
-%{_mandir}/man1/knife-configure.1*
-%{_mandir}/man1/knife-cookbook-site.1*
-%{_mandir}/man1/knife-cookbook.1*
-%{_mandir}/man1/knife-data-bag.1*
-%{_mandir}/man1/knife-delete.1*
-%{_mandir}/man1/knife-deps.1*
-%{_mandir}/man1/knife-diff.1*
-%{_mandir}/man1/knife-download.1*
-%{_mandir}/man1/knife-edit.1*
-%{_mandir}/man1/knife-environment.1*
-%{_mandir}/man1/knife-exec.1*
-%{_mandir}/man1/knife-index-rebuild.1*
-%{_mandir}/man1/knife-list.1*
-%{_mandir}/man1/knife-node.1*
-%{_mandir}/man1/knife-raw.1*
-%{_mandir}/man1/knife-recipe-list.1*
-%{_mandir}/man1/knife-role.1*
-%{_mandir}/man1/knife-search.1*
-%{_mandir}/man1/knife-serve.1*
-%{_mandir}/man1/knife-show.1*
-%{_mandir}/man1/knife-ssh.1*
-%{_mandir}/man1/knife-ssl-check.1*
-%{_mandir}/man1/knife-ssl-fetch.1*
-%{_mandir}/man1/knife-status.1*
-%{_mandir}/man1/knife-tag.1*
-%{_mandir}/man1/knife-upload.1*
-%{_mandir}/man1/knife-user.1*
-%{_mandir}/man1/knife-xargs.1*
-%{_mandir}/man1/knife.1*
 
 %files -n bash-completion-knife
 %defattr(644,root,root,755)
