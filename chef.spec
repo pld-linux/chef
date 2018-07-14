@@ -7,7 +7,7 @@
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	14.1.21
-Release:	0.1
+Release:	1
 License:	Apache v2.0
 Group:		Networking/Admin
 Source0:	https://github.com/chef/chef/archive/v%{version}/%{name}-%{version}.tar.gz
