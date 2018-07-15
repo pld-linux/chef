@@ -7,7 +7,7 @@
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	14.1.21
-Release:	2
+Release:	3
 License:	Apache v2.0
 Group:		Networking/Admin
 Source0:	https://github.com/chef/chef/archive/v%{version}/%{name}-%{version}.tar.gz
@@ -40,35 +40,41 @@ Requires:	lsb-release
 Requires:	poldek >= 0.30
 Requires:	ruby >= 1:2.4.0
 Requires:	ruby-addressable >= 0
-Requires:	ruby-diff-lcs >= 1.3
+Requires:	ruby-bundler >= 1.10
+Requires:	ruby-chef-config = %{version}
+Requires:	ruby-diff-lcs >= 1.2.4
+Requires:	ruby-diff-lcs < 2
 Requires:	ruby-erubis >= 2.7.0-3
 Requires:	ruby-erubis < 3
-Requires:	ruby-ffi < 1.9.23
+Requires:	ruby-ffi >= 1.9.22
+Requires:	ruby-ffi < 2
 Requires:	ruby-ffi-yajl >= 2.2
+Requires:	ruby-ffi-yajl < 3
 Requires:	ruby-highline >= 1.6.9
 Requires:	ruby-highline < 2
 Requires:	ruby-iniparse >= 1.4
 Requires:	ruby-iniparse < 2
 Requires:	ruby-iso8601 >= 0.9.1
 Requires:	ruby-iso8601 < 0.10
-Requires:	ruby-json >= 2.1.0
 Requires:	ruby-mixlib-archive >= 0.4
 Requires:	ruby-mixlib-archive < 1
 Requires:	ruby-mixlib-authentication >= 2.0
+Requires:	ruby-mixlib-authentication < 3
 Requires:	ruby-mixlib-cli >= 1.7
-Requires:	ruby-mixlib-config >= 2.0
-Requires:	ruby-mixlib-config < 3
+Requires:	ruby-mixlib-cli < 2
 Requires:	ruby-mixlib-log >= 2.0.3
+Requires:	ruby-mixlib-log < 3
 Requires:	ruby-mixlib-shellout >= 2.0
+Requires:	ruby-mixlib-shellout < 3
 Requires:	ruby-net-sftp >= 2.1.2
 Requires:	ruby-net-sftp < 3
 Requires:	ruby-net-ssh >= 4.2
 Requires:	ruby-net-ssh-multi >= 1.2.1
 Requires:	ruby-net-ssh-multi < 2
-Requires:	ruby-ohai >= 13.0
+Requires:	ruby-ohai >= 14.0
+Requires:	ruby-ohai < 15
 Requires:	ruby-proxifier >= 1.0
 Requires:	ruby-proxifier < 2
-Requires:	ruby-rest-client >= 1.0.4
 Requires:	ruby-rspec-core >= 3.5
 Requires:	ruby-rspec-core < 4
 Requires:	ruby-rspec-expectations >= 3.5
@@ -85,8 +91,6 @@ Requires:	ruby-syslog-logger >= 1.6
 Requires:	ruby-syslog-logger < 2
 Requires:	ruby-uuidtools >= 2.1.5
 Requires:	ruby-uuidtools < 2.2
-Requires:	ruby-yajl >= 1.1
-Requires:	ruby-yajl < 2
 Suggests:	chef-zero >= 13.0
 Suggests:	ruby-plist >= 3.2
 BuildArch:	noarch
