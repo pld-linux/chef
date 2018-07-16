@@ -7,12 +7,12 @@
 
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
-Version:	14.1.21
-Release:	0.3
+Version:	14.1.36
+Release:	0.1
 License:	Apache v2.0
 Group:		Networking/Admin
 Source0:	https://github.com/chef/chef/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	b67966a9b9e6c0a5947a604239267415
+# Source0-md5:	442169a1a824b3335376a88723e133a0
 Source2:	%{name}.tmpfiles
 Source3:	https://raw.github.com/stevendanna/knife-hacks/master/shell/knife_completion.sh
 # Source3-md5:	a4c1e41370be8088a59ddb3b2e7ea397
@@ -50,7 +50,6 @@ Requires:	ruby-mixlib-authentication >= 1.3.0-2
 Requires:	ruby-mixlib-config < 3
 Requires:	ruby-mixlib-config >= 2.0
 Requires:	ruby-mixlib-log >= 1.6.0-2
-Requires:	ruby-ohai < 9
 Requires:	ruby-rest-client >= 1.0.4
 Requires:	ruby-rubygems
 Suggests:	chef-zero >= 2.1.4
