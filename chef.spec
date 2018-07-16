@@ -46,10 +46,8 @@ Requires:	ruby-erubis >= 2.7.0-3
 Requires:	ruby-json
 Requires:	ruby-mime-types < 2
 Requires:	ruby-mime-types >= 1.16
-Requires:	ruby-mixlib-authentication >= 1.3.0-2
 Requires:	ruby-mixlib-config < 3
 Requires:	ruby-mixlib-config >= 2.0
-Requires:	ruby-mixlib-log >= 1.6.0-2
 Requires:	ruby-rest-client >= 1.0.4
 Requires:	ruby-rubygems
 Suggests:	chef-zero >= 2.1.4
