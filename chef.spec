@@ -8,7 +8,7 @@
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	14.1.21
-Release:	0.1
+Release:	0.3
 License:	Apache v2.0
 Group:		Networking/Admin
 Source0:	https://github.com/chef/chef/archive/v%{version}/%{name}-%{version}.tar.gz
@@ -43,8 +43,7 @@ Requires:	poldek >= 0.30
 Requires:	ruby >= 1:1.9.3.429-4
 Requires:	ruby-chef-config = %{version}-%{release}
 Requires:	ruby-erubis >= 2.7.0-3
-Requires:	ruby-json <= 1.8.1
-Requires:	ruby-json >= 1.4.4
+Requires:	ruby-json
 Requires:	ruby-mime-types < 2
 Requires:	ruby-mime-types >= 1.16
 Requires:	ruby-mixlib-authentication >= 1.3.0-2
