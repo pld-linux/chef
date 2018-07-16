@@ -7,12 +7,12 @@
 
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
-Version:	12.10.24
-Release:	0.8
+Version:	14.1.21
+Release:	0.1
 License:	Apache v2.0
 Group:		Networking/Admin
 Source0:	https://github.com/chef/chef/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	2390cdbde7445ccc288992401ed62f08
+# Source0-md5:	b67966a9b9e6c0a5947a604239267415
 Source2:	%{name}.tmpfiles
 Source3:	https://raw.github.com/stevendanna/knife-hacks/master/shell/knife_completion.sh
 # Source3-md5:	a4c1e41370be8088a59ddb3b2e7ea397
@@ -136,7 +136,7 @@ cd chef-config
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},%{_bindir},%{_mandir}/man1,%{systemdtmpfilesdir}} \
+install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},%{_bindir},%{systemdtmpfilesdir}} \
 	$RPM_BUILD_ROOT%{ruby_vendorlibdir}/chef/reporting \
 	$RPM_BUILD_ROOT%{ruby_specdir} \
 	$RPM_BUILD_ROOT/var/{run/%{name},cache/%{name},lib/%{name}/{roles,data_bags,environments,reports,backup}}
@@ -144,9 +144,7 @@ install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},%{_bindir},%{_mandir}/man1,%{s
 # chef
 cp -a lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
 cp -a bin/* $RPM_BUILD_ROOT%{_bindir}
-cp -a distro/common/man/* $RPM_BUILD_ROOT%{_mandir}
 cp -p chef-%{version}.gemspec $RPM_BUILD_ROOT%{ruby_specdir}
-%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/README.md
 
 # chef-config
 cp -a chef-config/lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
@@ -166,12 +164,9 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_sysconfdir}/%{name}
 %attr(755,root,root) %{_bindir}/chef-apply
 %attr(755,root,root) %{_bindir}/chef-client
+%attr(755,root,root) %{_bindir}/chef-resource-inspector
 %attr(755,root,root) %{_bindir}/chef-shell
 %attr(755,root,root) %{_bindir}/chef-solo
-%{_mandir}/man1/chef-shell.1*
-%{_mandir}/man8/chef-apply.8*
-%{_mandir}/man8/chef-client.8*
-%{_mandir}/man8/chef-solo.8*
 %{ruby_vendorlibdir}/chef.rb
 %{ruby_vendorlibdir}/chef
 %{ruby_specdir}/chef-%{version}.gemspec
@@ -204,37 +199,6 @@ rm -rf $RPM_BUILD_ROOT
 %{ruby_vendorlibdir}/chef/knife
 %{ruby_vendorlibdir}/chef/application/knife.rb
 %{ruby_vendorlibdir}/chef/chef_fs/knife.rb
-%{_mandir}/man1/knife-bootstrap.1*
-%{_mandir}/man1/knife-client.1*
-%{_mandir}/man1/knife-configure.1*
-%{_mandir}/man1/knife-cookbook-site.1*
-%{_mandir}/man1/knife-cookbook.1*
-%{_mandir}/man1/knife-data-bag.1*
-%{_mandir}/man1/knife-delete.1*
-%{_mandir}/man1/knife-deps.1*
-%{_mandir}/man1/knife-diff.1*
-%{_mandir}/man1/knife-download.1*
-%{_mandir}/man1/knife-edit.1*
-%{_mandir}/man1/knife-environment.1*
-%{_mandir}/man1/knife-exec.1*
-%{_mandir}/man1/knife-index-rebuild.1*
-%{_mandir}/man1/knife-list.1*
-%{_mandir}/man1/knife-node.1*
-%{_mandir}/man1/knife-raw.1*
-%{_mandir}/man1/knife-recipe-list.1*
-%{_mandir}/man1/knife-role.1*
-%{_mandir}/man1/knife-search.1*
-%{_mandir}/man1/knife-serve.1*
-%{_mandir}/man1/knife-show.1*
-%{_mandir}/man1/knife-ssh.1*
-%{_mandir}/man1/knife-ssl-check.1*
-%{_mandir}/man1/knife-ssl-fetch.1*
-%{_mandir}/man1/knife-status.1*
-%{_mandir}/man1/knife-tag.1*
-%{_mandir}/man1/knife-upload.1*
-%{_mandir}/man1/knife-user.1*
-%{_mandir}/man1/knife-xargs.1*
-%{_mandir}/man1/knife.1*
 
 %files -n bash-completion-knife
 %defattr(644,root,root,755)

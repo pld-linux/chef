@@ -1,15 +1,18 @@
---- chef-12.10.24/chef.gemspec	2016-06-02 22:12:49.407279113 +0300
-+++ chef-12.10.24/chef.gemspec	2016-06-02 22:28:11.841446131 +0300
-@@ -31,25 +31,11 @@
+--- chef-14.1.21/chef.gemspec~	2018-05-21 19:22:54.000000000 +0300
++++ chef-14.1.21/chef.gemspec	2018-07-16 14:45:25.219811439 +0300
+@@ -34,28 +34,15 @@
    s.add_dependency "erubis", "~> 2.7"
    s.add_dependency "diff-lcs", "~> 1.2", ">= 1.2.4"
  
--  s.add_dependency "chef-zero", "~> 4.5"
+-  s.add_dependency "chef-zero", ">= 13.0"
 -
 -  s.add_dependency "plist", "~> 3.2"
--
+   s.add_dependency "iniparse", "~> 1.4"
+   s.add_dependency "addressable"
+   s.add_dependency "iso8601", "~> 0.9.1"
+ 
 -  # Audit mode requires these, so they are non-developmental dependencies now
--  %w{rspec-core rspec-expectations rspec-mocks}.each { |gem| s.add_dependency gem, "~> 3.4" }
+-  %w{rspec-core rspec-expectations rspec-mocks}.each { |gem| s.add_dependency gem, "~> 3.5" }
 -  s.add_dependency "rspec_junit_formatter", "~> 0.2.0"
 -  s.add_dependency "serverspec", "~> 2.7"
 -  s.add_dependency "specinfra", "~> 2.10"
@@ -24,5 +27,5 @@
 -  s.add_dependency "bundler", ">= 1.10"
 -
    s.bindir       = "bin"
-   s.executables  = %w{ chef-client chef-solo knife chef-shell chef-apply }
+   s.executables  = %w{ chef-client chef-solo knife chef-shell chef-apply chef-resource-inspector }
  

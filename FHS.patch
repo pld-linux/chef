@@ -1,37 +1,292 @@
---- chef-11.8.0/lib/chef/handler/json_file.rb~	2013-12-21 17:25:17.000000000 +0200
-+++ chef-11.8.0/lib/chef/handler/json_file.rb	2013-12-21 17:25:58.665209433 +0200
-@@ -27,7 +27,7 @@
- 
-       def initialize(config={})
-         @config = config
--        @config[:path] ||= "/var/chef/reports"
-+        @config[:path] ||= "/var/lib/chef/reports"
-         @config
-       end
- 
---- chef-12.10.24/chef-config/lib/chef-config/config.rb~	2016-06-02 00:23:49.000000000 +0300
-+++ chef-12.10.24/chef-config/lib/chef-config/config.rb	2016-06-02 00:24:58.502867530 +0300
-@@ -170,7 +170,7 @@
+--- chef-14.1.21/chef-config/lib/chef-config/config.rb.orig	2018-05-21 18:22:54.000000000 +0200
++++ chef-14.1.21/chef-config/lib/chef-config/config.rb	2018-07-14 22:03:35.187220811 +0200
+@@ -214,7 +214,7 @@
  
      # Location of cookbooks on disk. String or array of strings.
      # Defaults to <chef_repo_path>/cookbooks.  If chef_repo_path
 -    # is not specified, this is set to [/var/chef/cookbooks, /var/chef/site-cookbooks]).
 +    # is not specified, this is set to [/var/lib/chef/cookbooks, /var/lib/chef/site-cookbooks]).
      default(:cookbook_path) do
-       if self.configuration[:chef_repo_path]
+       if configuration[:chef_repo_path]
          derive_path_from_chef_repo_path("cookbooks")
-@@ -234,10 +234,10 @@
-       if local_mode
+@@ -279,9 +279,9 @@
          PathHelper.join(config_dir, "local-mode-cache")
        else
--        primary_cache_root = platform_specific_path("/var")
+         primary_cache_root = platform_specific_path("/var")
 -        primary_cache_path = platform_specific_path("/var/chef")
 -        # Use /var/chef as the cache path only if that folder exists and we can read and write
 -        # into it, or /var exists and we can read and write into it (we'll create /var/chef later).
-+        primary_cache_root = platform_specific_path("/var/cache")
 +        primary_cache_path = platform_specific_path("/var/cache/chef")
 +        # Use /var/cache/chef as the cache path only if that folder exists and we can read and write
 +        # into it, or /var exists and we can read and write into it (we'll create /var/cache/chef later).
          # Otherwise, we'll create .chef under the user's home directory and use that as
          # the cache path.
          unless path_accessible?(primary_cache_path) || path_accessible?(primary_cache_root)
+@@ -303,10 +303,10 @@
+     default(:checksum_path) { PathHelper.join(cache_path, "checksums") }
+ 
+     # Where chef's cache files should be stored
+-    default(:file_cache_path) { PathHelper.join(cache_path, "cache") }
++    default(:file_cache_path) { cache_path }
+ 
+     # Where backups of chef-managed files should go
+-    default(:file_backup_path) { PathHelper.join(cache_path, "backup") }
++    default(:file_backup_path) { "/var/lib/chef/backup" }
+ 
+     # The chef-client (or solo) lockfile.
+     #
+--- chef-14.1.21/chef-config/spec/unit/config_spec.rb.orig	2018-05-21 18:22:54.000000000 +0200
++++ chef-14.1.21/chef-config/spec/unit/config_spec.rb	2018-07-14 22:10:47.642865027 +0200
+@@ -252,7 +252,7 @@
+           if is_windows
+             "#{ChefConfig::Config.env['SYSTEMDRIVE']}\\chef"
+           else
+-            "/var/chef"
++            "/var/cache/chef"
+           end
+         end
+ 
+@@ -375,34 +375,34 @@
+               allow(File).to receive(:expand_path).and_return("#{ChefConfig::Config.env["SYSTEMDRIVE"]}/Path/To/Executable")
+             end
+           end
+-          context "when /var/chef exists and is accessible" do
+-            it "defaults to /var/chef" do
+-              allow(ChefConfig::Config).to receive(:path_accessible?).with(to_platform("/var/chef")).and_return(true)
++          context "when /var/cache/chef exists and is accessible" do
++            it "defaults to /var/cache/chef" do
++              allow(ChefConfig::Config).to receive(:path_accessible?).with(to_platform("/var/cache/chef")).and_return(true)
+               expect(ChefConfig::Config[:cache_path]).to eq(primary_cache_path)
+             end
+           end
+ 
+-          context "when /var/chef does not exist and /var is accessible" do
+-            it "defaults to /var/chef" do
+-              allow(File).to receive(:exists?).with(to_platform("/var/chef")).and_return(false)
+-              allow(ChefConfig::Config).to receive(:path_accessible?).with(to_platform("/var")).and_return(true)
++          context "when /var/cache/chef does not exist and /var is accessible" do
++            it "defaults to /var/cache/chef" do
++              allow(File).to receive(:exists?).with(to_platform("/var/cache/chef")).and_return(false)
++              allow(ChefConfig::Config).to receive(:path_accessible?).with(to_platform("/var/cache")).and_return(true)
+               expect(ChefConfig::Config[:cache_path]).to eq(primary_cache_path)
+             end
+           end
+ 
+-          context "when /var/chef does not exist and /var is not accessible" do
++          context "when /var/cache/chef does not exist and /var is not accessible" do
+             it "defaults to $HOME/.chef" do
+-              allow(File).to receive(:exists?).with(to_platform("/var/chef")).and_return(false)
+-              allow(ChefConfig::Config).to receive(:path_accessible?).with(to_platform("/var")).and_return(false)
++              allow(File).to receive(:exists?).with(to_platform("/var/cache/chef")).and_return(false)
++              allow(ChefConfig::Config).to receive(:path_accessible?).with(to_platform("/var/cache")).and_return(false)
+               expect(ChefConfig::Config[:cache_path]).to eq(secondary_cache_path)
+             end
+           end
+ 
+-          context "when /var/chef exists and is not accessible" do
++          context "when /var/cache/chef exists and is not accessible" do
+             it "defaults to $HOME/.chef" do
+-              allow(File).to receive(:exists?).with(to_platform("/var/chef")).and_return(true)
+-              allow(File).to receive(:readable?).with(to_platform("/var/chef")).and_return(true)
+-              allow(File).to receive(:writable?).with(to_platform("/var/chef")).and_return(false)
++              allow(File).to receive(:exists?).with(to_platform("/var/cache/chef")).and_return(true)
++              allow(File).to receive(:readable?).with(to_platform("/var/cache/chef")).and_return(true)
++              allow(File).to receive(:writable?).with(to_platform("/var/cache/chef")).and_return(false)
+ 
+               expect(ChefConfig::Config[:cache_path]).to eq(secondary_cache_path)
+             end
+@@ -447,10 +447,8 @@
+           expect(ChefConfig::Config[:download_progress_interval]).to eq(10)
+         end
+ 
+-        it "ChefConfig::Config[:file_backup_path] defaults to /var/chef/backup" do
+-          allow(ChefConfig::Config).to receive(:cache_path).and_return(primary_cache_path)
+-          backup_path = is_windows ? "#{primary_cache_path}\\backup" : "#{primary_cache_path}/backup"
+-          expect(ChefConfig::Config[:file_backup_path]).to eq(backup_path)
++        it "ChefConfig::Config[:file_backup_path] defaults to /var/lib/chef/backup" do
++          expect(ChefConfig::Config[:file_backup_path]).to eq("/var/lib/chef/backup")
+         end
+ 
+         it "ChefConfig::Config[:ssl_verify_mode] defaults to :verify_peer" do
+@@ -568,19 +566,19 @@
+           end
+         end
+ 
+-        it "ChefConfig::Config[:data_bag_path] defaults to /var/chef/data_bags" do
++        it "ChefConfig::Config[:data_bag_path] defaults to /var/cache/chef/data_bags" do
+           allow(ChefConfig::Config).to receive(:cache_path).and_return(primary_cache_path)
+           data_bag_path = is_windows ? "#{primary_cache_path}\\data_bags" : "#{primary_cache_path}/data_bags"
+           expect(ChefConfig::Config[:data_bag_path]).to eq(data_bag_path)
+         end
+ 
+-        it "ChefConfig::Config[:environment_path] defaults to /var/chef/environments" do
++	it "ChefConfig::Config[:environment_path] defaults to /var/cache/chef/environments" do
+           allow(ChefConfig::Config).to receive(:cache_path).and_return(primary_cache_path)
+           environment_path = is_windows ? "#{primary_cache_path}\\environments" : "#{primary_cache_path}/environments"
+           expect(ChefConfig::Config[:environment_path]).to eq(environment_path)
+         end
+ 
+-        it "ChefConfig::Config[:cookbook_artifact_path] defaults to /var/chef/cookbook_artifacts" do
++        it "ChefConfig::Config[:cookbook_artifact_path] defaults to /var/cache/chef/cookbook_artifacts" do
+           allow(ChefConfig::Config).to receive(:cache_path).and_return(primary_cache_path)
+           environment_path = is_windows ? "#{primary_cache_path}\\cookbook_artifacts" : "#{primary_cache_path}/cookbook_artifacts"
+           expect(ChefConfig::Config[:cookbook_artifact_path]).to eq(environment_path)
+--- chef-14.1.21/lib/chef/handler/json_file.rb~	2018-05-21 18:22:54.000000000 +0200
++++ chef-14.1.21/lib/chef/handler/json_file.rb	2018-07-14 22:11:41.547750482 +0200
+@@ -27,7 +27,7 @@
+ 
+       def initialize(config = {})
+         @config = config
+-        @config[:path] ||= "/var/chef/reports"
++        @config[:path] ||= "/var/lib/chef/reports"
+       end
+ 
+       def report
+--- chef-14.1.21/spec/support/shared/context/client.rb~	2018-05-21 18:22:54.000000000 +0200
++++ chef-14.1.21/spec/support/shared/context/client.rb	2018-07-14 22:12:36.736009017 +0200
+@@ -164,7 +164,7 @@
+ 
+   before do
+     Chef::Config[:client_fork] = enable_fork
+-    Chef::Config[:cache_path] = windows? ? 'C:\chef' : "/var/chef"
++    Chef::Config[:cache_path] = windows? ? 'C:\chef' : "/var/cache/chef"
+     Chef::Config[:why_run] = false
+     Chef::Config[:audit_mode] = :enabled
+     Chef::Config[:chef_guid] = "default-guid"
+--- chef-14.1.21/spec/support/shared/context/config.rb~	2018-05-21 18:22:54.000000000 +0200
++++ chef-14.1.21/spec/support/shared/context/config.rb	2018-07-14 22:12:53.026479395 +0200
+@@ -13,7 +13,7 @@
+ # Basic config. Nothing fancy.
+ shared_context "default config options" do
+   before do
+-    Chef::Config[:cache_path] = windows? ? 'C:\chef' : "/var/chef"
++    Chef::Config[:cache_path] = windows? ? 'C:\chef' : "/var/cache/chef"
+   end
+ 
+   # Don't need to have an after block to reset the config...
+--- chef-14.1.21/spec/unit/application/solo_spec.rb~	2018-05-21 18:22:54.000000000 +0200
++++ chef-14.1.21/spec/unit/application/solo_spec.rb	2018-07-14 22:13:57.265002987 +0200
+@@ -206,10 +206,10 @@
+     end
+ 
+     it "sets the repo path" do
+-      expect(Chef::Config).to receive(:find_chef_repo_path).and_return("/var/chef")
++      expect(Chef::Config).to receive(:find_chef_repo_path).and_return("/var/lib/chef")
+       app.reconfigure
+       expect(Chef::Config.has_key?(:chef_repo_path)).to be_truthy
+-      expect(Chef::Config[:chef_repo_path]).to eq ("/var/chef")
++      expect(Chef::Config[:chef_repo_path]).to eq ("/var/lib/chef")
+     end
+ 
+     it "runs chef-client in local mode" do
+--- chef-14.1.21/spec/unit/cookbook/file_vendor_spec.rb~	2018-05-21 18:22:54.000000000 +0200
++++ chef-14.1.21/spec/unit/cookbook/file_vendor_spec.rb	2018-07-14 22:14:31.759334653 +0200
+@@ -75,7 +75,7 @@
+ 
+   context "when configured to load files from disk" do
+ 
+-    let(:cookbook_path) { %w{/var/chef/cookbooks /var/chef/other_cookbooks} }
++    let(:cookbook_path) { %w{/var/lib/chef/cookbooks /var/lib/chef/other_cookbooks} }
+ 
+     let(:manifest) do
+       cbv = Chef::CookbookVersion.new("bob", Array(Dir.tmpdir))
+--- chef-14.1.21/spec/unit/data_bag_spec.rb~	2018-05-21 18:22:54.000000000 +0200
++++ chef-14.1.21/spec/unit/data_bag_spec.rb	2018-07-14 22:15:36.734550542 +0200
+@@ -243,17 +243,17 @@
+ 
+         expect do
+           Chef::DataBag.load("foo")
+-        end.to raise_error Chef::Exceptions::InvalidDataBagPath, "Data bag path '/var/chef/data_bags' is invalid"
++        end.to raise_error Chef::Exceptions::InvalidDataBagPath, "Data bag path '/var/cache/chef/data_bags' is invalid"
+       end
+ 
+     end
+ 
+     describe "data bag with string path" do
+-      it_should_behave_like "data bag in solo mode", "/var/chef/data_bags"
++      it_should_behave_like "data bag in solo mode", "/var/cache/chef/data_bags"
+     end
+ 
+     describe "data bag with array path" do
+-      it_should_behave_like "data bag in solo mode", ["/var/chef/data_bags", "/var/chef/data_bags_2"]
++      it_should_behave_like "data bag in solo mode", ["/var/cache/chef/data_bags", "/var/cache/chef/data_bags_2"]
+     end
+   end
+ 
+--- chef-14.1.21/spec/unit/environment_spec.rb~	2018-05-21 18:22:54.000000000 +0200
++++ chef-14.1.21/spec/unit/environment_spec.rb	2018-07-14 22:16:20.332481816 +0200
+@@ -393,7 +393,7 @@
+     describe "in solo mode" do
+       before do
+         Chef::Config[:solo_legacy_mode] = true
+-        Chef::Config[:environment_path] = "/var/chef/environments"
++        Chef::Config[:environment_path] = "/var/cache/chef/environments"
+       end
+ 
+       after do
+@@ -452,7 +452,7 @@
+ 
+         expect do
+           Chef::Environment.load("foo")
+-        end.to raise_error Chef::Exceptions::InvalidEnvironmentPath, "Environment path '/var/chef/environments' is invalid"
++        end.to raise_error Chef::Exceptions::InvalidEnvironmentPath, "Environment path '/var/cache/chef/environments' is invalid"
+       end
+ 
+       it "should raise an error if the file does not exist" do
+--- chef-14.1.21/spec/unit/formatters/error_inspectors/resource_failure_inspector_spec.rb~	2018-05-21 18:22:54.000000000 +0200
++++ chef-14.1.21/spec/unit/formatters/error_inspectors/resource_failure_inspector_spec.rb	2018-07-14 22:17:33.390766108 +0200
+@@ -42,7 +42,7 @@
+     @outputter = Chef::Formatters::IndentableOutputStream.new(@stdout, STDERR)
+     #@outputter = Chef::Formatters::IndentableOutputStream.new(STDOUT, STDERR)
+ 
+-    allow(Chef::Config).to receive(:cookbook_path).and_return([ "/var/chef/cache" ])
++    allow(Chef::Config).to receive(:cookbook_path).and_return([ "/var/lib/chef" ])
+   end
+ 
+   describe "when explaining an error converging a resource" do
+@@ -58,8 +58,8 @@
+       end
+ 
+       @trace = [
+-        "/var/chef/cache/cookbooks/syntax-err/recipes/default.rb:14:in `from_file'",
+-        "/var/chef/cache/cookbooks/syntax-err/recipes/default.rb:11:in `from_file'",
++        "/var/lib/chef/cookbooks/syntax-err/recipes/default.rb:14:in `from_file'",
++        "/var/lib/chef/cookbooks/syntax-err/recipes/default.rb:11:in `from_file'",
+         "/usr/local/lib/ruby/gems/chef/lib/chef/client.rb:123:in `run'" # should not display
+       ]
+       @exception = Chef::Exceptions::Package.new("No such package 'non-existing-package'")
+@@ -70,8 +70,8 @@
+ 
+     it "filters chef core code from the backtrace" do
+       @expected_filtered_trace = [
+-        "/var/chef/cache/cookbooks/syntax-err/recipes/default.rb:14:in `from_file'",
+-        "/var/chef/cache/cookbooks/syntax-err/recipes/default.rb:11:in `from_file'",
++        "/var/lib/chef/cookbooks/syntax-err/recipes/default.rb:14:in `from_file'",
++        "/var/lib/chef/cookbooks/syntax-err/recipes/default.rb:11:in `from_file'",
+       ]
+ 
+       expect(@inspector.filtered_bt).to eq(@expected_filtered_trace)
+--- chef-14.1.21/spec/unit/role_spec.rb~	2018-05-21 18:22:54.000000000 +0200
++++ chef-14.1.21/spec/unit/role_spec.rb	2018-07-14 22:18:45.421896466 +0200
+@@ -252,7 +252,7 @@
+ 
+   describe "when loading from disk" do
+     before do
+-      default_cache_path = windows? ? 'C:\chef' : "/var/chef"
++      default_cache_path = windows? ? 'C:\chef' : "/var/cache/chef"
+       allow(Chef::Config).to receive(:cache_path).and_return(default_cache_path)
+     end
+ 
+--- chef-14.1.21/spec/unit/run_lock_spec.rb~	2018-05-21 18:22:54.000000000 +0200
++++ chef-14.1.21/spec/unit/run_lock_spec.rb	2018-07-14 22:19:37.309448017 +0200
+@@ -20,8 +20,8 @@
+ 
+ describe Chef::RunLock do
+ 
+-  default_cache_path = windows? ? 'C:\chef' : "/var/chef"
+-  default_pid_location = windows? ? 'C:\chef\cache\chef-client-running.pid' : "/var/chef/cache/chef-client-running.pid"
++  default_cache_path = windows? ? 'C:\chef' : "/var/cache/chef"
++  default_pid_location = windows? ? 'C:\chef\cache\chef-client-running.pid' : "/var/cache/chef/chef-client-running.pid"
+ 
+   describe "when first created" do
+     it "locates the lockfile in the file cache path by default" do

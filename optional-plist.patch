@@ -1,5 +1,5 @@
---- chef-12.10.24/lib/chef/provider/user/dscl.rb~	2016-06-01 23:58:45.000000000 +0300
-+++ chef-12.10.24/lib/chef/provider/user/dscl.rb	2016-06-02 00:00:22.479841208 +0300
+--- chef-14.1.21/lib/chef/provider/user/dscl.rb~	2018-05-21 18:22:54.000000000 +0200
++++ chef-14.1.21/lib/chef/provider/user/dscl.rb	2018-07-14 22:26:52.821861848 +0200
 @@ -19,7 +19,6 @@
  require "mixlib/shellout"
  require "chef/provider/user"
@@ -8,7 +8,7 @@
  require "chef/util/path_helper"
  
  class Chef
-@@ -130,6 +129,7 @@
+@@ -136,6 +135,7 @@
  
                # Calling shell_out directly since we want to give an input stream
                shadow_hash_xml = convert_binary_plist_to_xml(shadow_hash_binary.string)
@@ -16,37 +16,19 @@
                shadow_hash = Plist.parse_xml(shadow_hash_xml)
  
                if shadow_hash["SALTED-SHA512"]
-@@ -589,6 +589,7 @@
+@@ -591,6 +591,7 @@
            begin
              user_plist_file = "#{USER_PLIST_DIRECTORY}/#{new_resource.username}.plist"
-             user_plist_info = run_plutil("convert xml1 -o - #{user_plist_file}")
+             user_plist_info = run_plutil("convert", "xml1", "-o", "-", user_plist_file)
 +            require "plist"
              user_info = Plist.parse_xml(user_plist_info)
            rescue Chef::Exceptions::PlistUtilCommandFailed
            end
-@@ -601,6 +602,7 @@
-         # in DSCL_PROPERTY_MAP to the disk.
+@@ -604,6 +605,7 @@
          #
          def save_user_info(user_info)
-+          require "plist"
            user_plist_file = "#{USER_PLIST_DIRECTORY}/#{new_resource.username}.plist"
++          require "plist"
            Plist::Emit.save_plist(user_info, user_plist_file)
-           run_plutil("convert binary1 #{user_plist_file}")
---- ./lib/chef/provider/launchd.rb~	2016-04-27 20:57:14.000000000 +0300
-+++ ./lib/chef/provider/launchd.rb	2016-06-02 22:33:01.049679641 +0300
-@@ -21,7 +21,6 @@
- require "chef/resource/file"
- require "chef/resource/cookbook_file"
- require "chef/resource/macosx_service"
--require "plist"
- require "forwardable"
- 
- class Chef
-@@ -150,6 +149,7 @@
-       end
- 
-       def content
-+        require "plist"
-         plist_hash = new_resource.hash || gen_hash
-         Plist::Emit.dump(plist_hash) unless plist_hash.nil?
-       end
+           run_plutil("convert", "binary1", user_plist_file)
+         end
