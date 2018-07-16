@@ -1,5 +1,14 @@
---- chef-14.1.21/chef.gemspec~	2018-05-21 19:22:54.000000000 +0300
-+++ chef-14.1.21/chef.gemspec	2018-07-16 14:45:25.219811439 +0300
+--- chef-14.1.21/chef.gemspec	2018-07-16 14:45:25.219811439 +0300
++++ chef-14.1.36/chef.gemspec	2018-07-16 16:31:33.837545915 +0300
+@@ -26,7 +26,7 @@
+ 
+   s.add_dependency "ffi", "~> 1.9", ">= 1.9.25"
+   s.add_dependency "ffi-yajl", "~> 2.2"
+-  s.add_dependency "net-ssh", "~> 4.2"
++  s.add_dependency "net-ssh", ">= 4.2"
+   s.add_dependency "net-ssh-multi", "~> 1.2", ">= 1.2.1"
+   s.add_dependency "net-sftp", "~> 2.1", ">= 2.1.2"
+   s.add_dependency "highline", "~> 1.6", ">= 1.6.9"
 @@ -34,28 +34,15 @@
    s.add_dependency "erubis", "~> 2.7"
    s.add_dependency "diff-lcs", "~> 1.2", ">= 1.2.4"
