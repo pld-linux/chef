@@ -1,14 +1,16 @@
 poldek package manager support
 
-https://tickets.opscode.com/browse/CHEF-4476
-https://github.com/opscode/chef/pull/1225
+https://github.com/chef/chef/pull/7482
 
---- chef-11.12.8/lib/chef/provider/package/poldek.rb	1970-01-01 02:00:00.000000000 +0200
-+++ chef-11.12.8.poldek/lib/chef/provider/package/poldek.rb	2014-12-04 18:27:24.468416380 +0200
-@@ -0,0 +1,123 @@
+diff --git a/lib/chef/provider/package/poldek.rb b/lib/chef/provider/package/poldek.rb
+new file mode 100644
+index 000000000..63e3961a0
+--- /dev/null
++++ b/lib/chef/provider/package/poldek.rb
+@@ -0,0 +1,125 @@
 +#
 +# Author:: Elan Ruusamäe (glen@pld-linux.org)
-+# Copyright:: Copyright (c) 2013 Elan Ruusamäe
++# Copyright:: Copyright (c) 2013,2018 Elan Ruusamäe
 +# License:: Apache License, Version 2.0
 +#
 +# Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,6 +38,8 @@ https://github.com/opscode/chef/pull/1225
 +      class Poldek < Chef::Provider::Package
 +        include Chef::Mixin::ShellOut
 +        attr_accessor :is_virtual_package
++
++        provides :package, platform_family: "pld"
 +
 +        def load_current_resource
 +            Chef::Log.debug("#{@new_resource} loading current resource")
@@ -129,18 +133,23 @@ https://github.com/opscode/chef/pull/1225
 +    end
 +  end
 +end
---- chef-12.10.24/lib/chef/providers.rb~	2016-06-01 23:57:35.000000000 +0300
-+++ chef-12.10.24/lib/chef/providers.rb	2016-06-01 23:58:15.093249546 +0300
-@@ -72,6 +72,7 @@
- require "chef/provider/package/macports"
+diff --git a/lib/chef/providers.rb b/lib/chef/providers.rb
+index cd265b061..075ffd7e8 100644
+--- a/lib/chef/providers.rb
++++ b/lib/chef/providers.rb
+@@ -74,6 +74,7 @@ require "chef/provider/package/macports"
  require "chef/provider/package/openbsd"
  require "chef/provider/package/pacman"
-+require "chef/provider/package/poldek"
  require "chef/provider/package/portage"
++require 'chef/provider/package/poldek'
  require "chef/provider/package/paludis"
  require "chef/provider/package/rpm"
---- chef-11.12.8/lib/chef/resource/poldek_package.rb	1970-01-01 02:00:00.000000000 +0200
-+++ chef-11.12.8.poldek/lib/chef/resource/poldek_package.rb	2014-12-04 18:27:24.438414927 +0200
+ require "chef/provider/package/rubygems"
+diff --git a/lib/chef/resource/poldek_package.rb b/lib/chef/resource/poldek_package.rb
+new file mode 100644
+index 000000000..cdc8f9209
+--- /dev/null
++++ b/lib/chef/resource/poldek_package.rb
 @@ -0,0 +1,34 @@
 +#
 +# Author:: Elan Ruusamäe (glen@pld-linux.org)
