@@ -1,19 +1,19 @@
---- chef-11.14.2/lib/chef/platform/provider_mapping.rb~	2014-12-04 18:02:46.000000000 +0200
-+++ chef-11.14.2/lib/chef/platform/provider_mapping.rb	2014-12-04 18:07:26.765336890 +0200
-@@ -194,6 +194,16 @@
-                 :group => Chef::Provider::Group::Suse
-               }
+--- chef-14.1.21/spec/unit/provider_resolver_spec.rb.orig	2018-05-21 18:22:54.000000000 +0200
++++ chef-14.1.21/spec/unit/provider_resolver_spec.rb	2018-07-14 21:52:07.158840235 +0200
+@@ -722,6 +722,16 @@
              },
-+            :pld => {
-+              :default => {
-+                :service => Chef::Provider::Service::Redhat,
-+                :cron => Chef::Provider::Cron,
-+                :package => Chef::Provider::Package::Poldek,
-+                :mdadm => Chef::Provider::Mdadm,
-+                :ifconfig => Chef::Provider::Ifconfig::Redhat, # TODO: PLD config path needed
-+                :group => Chef::Provider::Group::Usermod,
-+              }
+           },
+ 
++          "pld" => {
++    #        service: [ Chef::Resource::SystemdService, Chef::Provider::Service::Systemd ],
++            package: [ Chef::Resource::PoldekPackage, Chef::Provider::Package::Poldek ],
++            ifconfig: [ Chef::Resource::Ifconfig, Chef::Provider::Ifconfig::Redhat ],
++            group:   [ Chef::Resource::Group, Chef::Provider::Group::Usermod ],
++
++            "pld" => {
++              "3.0" => {
++              },
 +            },
-             :oracle  => {
-               :default => {
-                 :service => Chef::Provider::Service::Redhat,
+         },
+ 
+         "freebsd" => {
