@@ -32,3 +32,22 @@
            Plist::Emit.save_plist(user_info, user_plist_file)
            run_plutil("convert", "binary1", user_plist_file)
          end
+--- chef-14.1.36/lib/chef/provider/launchd.rb~	2018-06-04 22:47:04.000000000 +0300
++++ chef-14.1.36/lib/chef/provider/launchd.rb	2018-07-16 17:04:37.751739371 +0300
+@@ -20,7 +20,6 @@
+ require "chef/resource/file"
+ require "chef/resource/cookbook_file"
+ require "chef/resource/macosx_service"
+-require "plist"
+ require "forwardable"
+ 
+ class Chef
+@@ -173,6 +172,8 @@
+       end
+ 
+       def content
++        require "plist"
++
+         plist_hash = new_resource.plist_hash || gen_hash
+         Plist::Emit.dump(plist_hash) unless plist_hash.nil?
+       end
