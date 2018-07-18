@@ -17,3 +17,14 @@
          },
  
          "freebsd" => {
+--- ./lib/chef/provider/service/redhat.rb~	2018-06-04 22:47:04.000000000 +0300
++++ ./lib/chef/provider/service/redhat.rb	2018-07-17 12:07:21.135952859 +0300
+@@ -28,7 +28,7 @@
+         # @api private
+         attr_accessor :current_run_levels
+ 
+-        provides :service, platform_family: %w{rhel fedora suse amazon} do |node|
++        provides :service, platform_family: %w{rhel fedora suse amazon pld} do |node|
+           Chef::Platform::ServiceHelpers.service_resource_providers.include?(:redhat)
+         end
+ 
