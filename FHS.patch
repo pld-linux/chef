@@ -35,6 +35,17 @@
  
      # The chef-client (or solo) lockfile.
      #
+--- chef-14.3.37/lib/chef/resource/launchd.rb~	2018-07-10 23:49:12.000000000 +0300
++++ chef-14.3.37/lib/chef/resource/launchd.rb	2018-07-21 18:36:11.686358648 +0300
+@@ -36,7 +36,7 @@
+ 
+       property :backup, [Integer, FalseClass],
+                desired_state: false,
+-               description: "The number of backups to be kept in /var/chef/backup. Set to false to prevent backups from being kept."
++               description: "The number of backups to be kept in /var/lib/chef/backup. Set to false to prevent backups from being kept."
+ 
+       property :cookbook, String,
+                desired_state: false,
 --- chef-14.1.21/chef-config/spec/unit/config_spec.rb.orig	2018-05-21 18:22:54.000000000 +0200
 +++ chef-14.1.21/chef-config/spec/unit/config_spec.rb	2018-07-14 22:10:47.642865027 +0200
 @@ -252,7 +252,7 @@
@@ -164,8 +175,8 @@
    end
  
    # Don't need to have an after block to reset the config...
---- chef-14.1.21/spec/unit/application/solo_spec.rb~	2018-05-21 18:22:54.000000000 +0200
-+++ chef-14.1.21/spec/unit/application/solo_spec.rb	2018-07-14 22:13:57.265002987 +0200
+--- chef-14.3.37/spec/unit/application/solo_spec.rb~	2018-07-10 23:49:12.000000000 +0300
++++ chef-14.3.37/spec/unit/application/solo_spec.rb	2018-07-21 18:35:10.469813803 +0300
 @@ -206,10 +206,10 @@
      end
  
@@ -173,7 +184,7 @@
 -      expect(Chef::Config).to receive(:find_chef_repo_path).and_return("/var/chef")
 +      expect(Chef::Config).to receive(:find_chef_repo_path).and_return("/var/lib/chef")
        app.reconfigure
-       expect(Chef::Config.has_key?(:chef_repo_path)).to be_truthy
+       expect(Chef::Config.key?(:chef_repo_path)).to be_truthy
 -      expect(Chef::Config[:chef_repo_path]).to eq ("/var/chef")
 +      expect(Chef::Config[:chef_repo_path]).to eq ("/var/lib/chef")
      end
