@@ -1,0 +1,40 @@
+--- chef-14.1.21/chef.gemspec	2018-07-16 14:45:25.219811439 +0300
++++ chef-14.1.36/chef.gemspec	2018-07-16 16:31:33.837545915 +0300
+@@ -26,7 +26,7 @@
+ 
+   s.add_dependency "ffi", "~> 1.9", ">= 1.9.25"
+   s.add_dependency "ffi-yajl", "~> 2.2"
+-  s.add_dependency "net-ssh", "~> 4.2"
++  s.add_dependency "net-ssh", ">= 4.2"
+   s.add_dependency "net-ssh-multi", "~> 1.2", ">= 1.2.1"
+   s.add_dependency "net-sftp", "~> 2.1", ">= 2.1.2"
+   s.add_dependency "highline", "~> 1.6", ">= 1.6.9"
+@@ -34,28 +34,15 @@
+   s.add_dependency "erubis", "~> 2.7"
+   s.add_dependency "diff-lcs", "~> 1.2", ">= 1.2.4"
+ 
+-  s.add_dependency "chef-zero", ">= 13.0"
+-
+-  s.add_dependency "plist", "~> 3.2"
+   s.add_dependency "iniparse", "~> 1.4"
+   s.add_dependency "addressable"
+   s.add_dependency "iso8601", "~> 0.9.1"
+ 
+-  # Audit mode requires these, so they are non-developmental dependencies now
+-  %w{rspec-core rspec-expectations rspec-mocks}.each { |gem| s.add_dependency gem, "~> 3.5" }
+-  s.add_dependency "rspec_junit_formatter", "~> 0.2.0"
+-  s.add_dependency "serverspec", "~> 2.7"
+-  s.add_dependency "specinfra", "~> 2.10"
+-
+   s.add_dependency "syslog-logger", "~> 1.6"
+   s.add_dependency "uuidtools", "~> 2.1.5"
+ 
+   s.add_dependency "proxifier", "~> 1.0"
+ 
+-  # v1.10 is needed as a runtime dep now for 'bundler/inline'
+-  # very deliberately avoiding putting a ceiling on this to avoid depsolver conflicts.
+-  s.add_dependency "bundler", ">= 1.10"
+-
+   s.bindir       = "bin"
+   s.executables  = %w{ chef-client chef-solo knife chef-shell chef-apply chef-resource-inspector }
+ 

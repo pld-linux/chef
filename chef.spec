@@ -1,17 +1,18 @@
 # NOTE:
-# - check releases here: https://github.com/opscode/chef/releases
+# - check releases here: https://downloads.chef.io/chef-client/debian/
+#   the versions tagged in github are somewhat newer, perhaps dev-releases
 
 # Conditional build:
 %bcond_with	tests		# build without tests
 
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
-Version:	14.1.21
-Release:	3
+Version:	14.1.36
+Release:	1
 License:	Apache v2.0
 Group:		Networking/Admin
 Source0:	https://github.com/chef/chef/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	b67966a9b9e6c0a5947a604239267415
+# Source0-md5:	442169a1a824b3335376a88723e133a0
 Source2:	%{name}.tmpfiles
 Source3:	https://raw.github.com/stevendanna/knife-hacks/master/shell/knife_completion.sh
 # Source3-md5:	a4c1e41370be8088a59ddb3b2e7ea397
@@ -19,8 +20,9 @@ Patch0:		platform-pld.patch
 Patch1:		FHS.patch
 Patch2:		poldek.patch
 Patch3:		https://github.com/glensc/chef/compare/pld-knife-boostrap.patch
-# Patch3-md5:	9bc4b39952e6bc326b16207cd6a59141
+# Patch3-md5:	8ff0fdfde6dc90018698775bf8f13062
 Patch4:		optional-plist.patch
+Patch5:		gemdeps.patch
 URL:		https://www.chef.io/
 BuildRequires:	rpm-rubyprov
 BuildRequires:	rpmbuild(macros) >= 1.673
@@ -38,61 +40,18 @@ BuildRequires:	ruby-rspec_junit_formatter
 %endif
 Requires:	lsb-release
 Requires:	poldek >= 0.30
-Requires:	ruby >= 1:2.4.0
-Requires:	ruby-addressable >= 0
-Requires:	ruby-bundler >= 1.10
-Requires:	ruby-chef-config = %{version}
-Requires:	ruby-diff-lcs >= 1.2.4
-Requires:	ruby-diff-lcs < 2
+Requires:	ruby >= 1:1.9.3.429-4
+Requires:	ruby-chef-config = %{version}-%{release}
 Requires:	ruby-erubis >= 2.7.0-3
-Requires:	ruby-erubis < 3
-Requires:	ruby-ffi >= 1.9.22
-Requires:	ruby-ffi < 2
-Requires:	ruby-ffi-yajl >= 2.2
-Requires:	ruby-ffi-yajl < 3
-Requires:	ruby-highline >= 1.6.9
-Requires:	ruby-highline < 2
-Requires:	ruby-iniparse >= 1.4
-Requires:	ruby-iniparse < 2
-Requires:	ruby-iso8601 >= 0.9.1
-Requires:	ruby-iso8601 < 0.10
-Requires:	ruby-mixlib-archive >= 0.4
-Requires:	ruby-mixlib-archive < 1
-Requires:	ruby-mixlib-authentication >= 2.0
-Requires:	ruby-mixlib-authentication < 3
-Requires:	ruby-mixlib-cli >= 1.7
-Requires:	ruby-mixlib-cli < 2
-Requires:	ruby-mixlib-log >= 2.0.3
-Requires:	ruby-mixlib-log < 3
-Requires:	ruby-mixlib-shellout >= 2.0
-Requires:	ruby-mixlib-shellout < 3
-Requires:	ruby-net-sftp >= 2.1.2
-Requires:	ruby-net-sftp < 3
-Requires:	ruby-net-ssh >= 4.2
-Requires:	ruby-net-ssh-multi >= 1.2.1
-Requires:	ruby-net-ssh-multi < 2
-Requires:	ruby-ohai >= 14.0
-Requires:	ruby-ohai < 15
-Requires:	ruby-proxifier >= 1.0
-Requires:	ruby-proxifier < 2
-Requires:	ruby-rspec-core >= 3.5
-Requires:	ruby-rspec-core < 4
-Requires:	ruby-rspec-expectations >= 3.5
-Requires:	ruby-rspec-expectations < 4
-Requires:	ruby-rspec_junit_formatter >= 0.2.0
-Requires:	ruby-rspec-mocks >= 3.5
-Requires:	ruby-rspec-mocks < 4
+Requires:	ruby-json
+Requires:	ruby-mime-types < 2
+Requires:	ruby-mime-types >= 1.16
+Requires:	ruby-mixlib-config < 3
+Requires:	ruby-mixlib-config >= 2.0
+Requires:	ruby-rest-client >= 1.0.4
 Requires:	ruby-rubygems
-Requires:	ruby-serverspec >= 2.7
-Requires:	ruby-serverspec < 3
-Requires:	ruby-specinfra >= 2.10
-Requires:	ruby-specinfra < 3
-Requires:	ruby-syslog-logger >= 1.6
-Requires:	ruby-syslog-logger < 2
-Requires:	ruby-uuidtools >= 2.1.5
-Requires:	ruby-uuidtools < 2.2
-Suggests:	chef-zero >= 13.0
-Suggests:	ruby-plist >= 3.2
+Suggests:	chef-zero >= 2.1.4
+Suggests:	ruby-plist >= 3.1.0
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -102,6 +61,13 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 A systems integration framework, built to bring the benefits of
 configuration management to your entire infrastructure.
+
+%package -n ruby-chef-config
+Summary:	Chef's default configuration and config loading
+Group:		Development/Languages
+
+%description -n ruby-chef-config
+Chef's default configuration and config loading.
 
 %package -n bash-completion-knife
 Summary:	bash-completion for knife
@@ -134,27 +100,51 @@ subcommand is documented in its own manual page.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
+
+%ifos linux
+# those do not match s.executables from .gemspec
+rm bin/chef-service-manager
+rm bin/chef-windows-service
+%endif
+
+# don't package this, a maintainer's rake task
+rm chef-config/lib/chef-config/package_task.rb
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
-#grep --exclude-dir=spec --exclude-dir=distro -r /var/chef . && exit 1
+grep --exclude-dir=spec --exclude-dir=distro --exclude=CHANGELOG.md -r /var/chef . && exit 1
 
 %build
+# make gemspec self-contained
+%__gem_helper spec-dump %{name}.gemspec
+
 %if %{with tests}
 rspec spec
 %endif
 
+cd chef-config
+# make gemspec self-contained
+%__gem_helper spec-dump %{name}-config.gemspec
+
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},%{_bindir},%{_mandir}/man1,%{systemdtmpfilesdir}} \
+install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},%{_bindir},%{systemdtmpfilesdir}} \
 	$RPM_BUILD_ROOT%{ruby_vendorlibdir}/chef/reporting \
-	$RPM_BUILD_ROOT/var/{run/%{name},cache/%{name},lib/%{name}/{roles,data_bags,environments,backup}}
+	$RPM_BUILD_ROOT%{ruby_specdir} \
+	$RPM_BUILD_ROOT/var/{run/%{name},cache/%{name},lib/%{name}/{roles,data_bags,environments,reports,backup}}
 
+# chef
 cp -a lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
 cp -a bin/* $RPM_BUILD_ROOT%{_bindir}
+cp -p chef-%{version}.gemspec $RPM_BUILD_ROOT%{ruby_specdir}
+
+# chef-config
+cp -a chef-config/lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
+cp -p chef-config/chef-config-%{version}.gemspec $RPM_BUILD_ROOT%{ruby_specdir}
 
 cp -p %{SOURCE2} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
@@ -171,12 +161,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/chef-apply
 %attr(755,root,root) %{_bindir}/chef-client
 %attr(755,root,root) %{_bindir}/chef-resource-inspector
-%attr(755,root,root) %{_bindir}/chef-service-manager
 %attr(755,root,root) %{_bindir}/chef-shell
 %attr(755,root,root) %{_bindir}/chef-solo
-%attr(755,root,root) %{_bindir}/chef-windows-service
 %{ruby_vendorlibdir}/chef.rb
 %{ruby_vendorlibdir}/chef
+%{ruby_specdir}/chef-%{version}.gemspec
 %exclude %{ruby_vendorlibdir}/chef/knife
 %exclude %{ruby_vendorlibdir}/chef/application/knife.rb
 %exclude %{ruby_vendorlibdir}/chef/chef_fs/knife.rb
@@ -187,10 +176,17 @@ rm -rf $RPM_BUILD_ROOT
 %dir /var/lib/%{name}/roles
 %dir /var/lib/%{name}/data_bags
 %dir /var/lib/%{name}/environments
+%dir /var/lib/%{name}/reports
 %dir %attr(750,root,root) /var/lib/%{name}/backup
 
 %dir /var/cache/%{name}
 %dir /var/run/%{name}
+
+%files -n ruby-chef-config
+%defattr(644,root,root,755)
+%{ruby_vendorlibdir}/chef-config.rb
+%{ruby_vendorlibdir}/chef-config
+%{ruby_specdir}/chef-config-%{version}.gemspec
 
 %files -n knife
 %defattr(644,root,root,755)
