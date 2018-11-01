@@ -1,0 +1,11 @@
+--- chef-14.1.36/lib/chef/version_string.rb~	2018-06-04 22:47:04.000000000 +0300
++++ chef-14.1.36/lib/chef/version_string.rb	2018-11-01 15:41:08.594148157 +0200
+@@ -13,6 +13,8 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
++require "rubygems"
++
+ class Chef
+   # String-like object for version strings.
+   #
