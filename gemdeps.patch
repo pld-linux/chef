@@ -1,5 +1,5 @@
---- chef-14.1.21/chef.gemspec	2018-07-16 14:45:25.219811439 +0300
-+++ chef-14.1.36/chef.gemspec	2018-07-16 16:31:33.837545915 +0300
+--- chef-14.13.15/chef.gemspec~	2019-08-20 17:11:29.000000000 +0300
++++ chef-14.13.15/chef.gemspec	2019-08-20 17:12:20.043551512 +0300
 @@ -26,7 +26,7 @@
  
    s.add_dependency "ffi", "~> 1.9", ">= 1.9.25"
@@ -9,7 +9,7 @@
    s.add_dependency "net-ssh-multi", "~> 1.2", ">= 1.2.1"
    s.add_dependency "net-sftp", "~> 2.1", ">= 2.1.2"
    s.add_dependency "highline", "~> 1.6", ">= 1.6.9"
-@@ -34,28 +34,15 @@
+@@ -33,27 +33,14 @@
    s.add_dependency "erubis", "~> 2.7"
    s.add_dependency "diff-lcs", "~> 1.2", ">= 1.2.4"
  
@@ -18,7 +18,6 @@
 -  s.add_dependency "plist", "~> 3.2"
    s.add_dependency "iniparse", "~> 1.4"
    s.add_dependency "addressable"
-   s.add_dependency "iso8601", "~> 0.9.1"
  
 -  # Audit mode requires these, so they are non-developmental dependencies now
 -  %w{rspec-core rspec-expectations rspec-mocks}.each { |gem| s.add_dependency gem, "~> 3.5" }

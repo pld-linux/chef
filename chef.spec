@@ -7,12 +7,12 @@
 
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
-Version:	14.1.36
-Release:	2
+Version:	14.13.15
+Release:	1
 License:	Apache v2.0
 Group:		Networking/Admin
 Source0:	https://github.com/chef/chef/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	442169a1a824b3335376a88723e133a0
+# Source0-md5:	95a6ba0d3dd61dd01f3c1511e92e2ba3
 Source2:	%{name}.tmpfiles
 Source3:	https://raw.github.com/stevendanna/knife-hacks/master/shell/knife_completion.sh
 # Source3-md5:	a4c1e41370be8088a59ddb3b2e7ea397
@@ -111,9 +111,6 @@ subcommand is documented in its own manual page.
 rm bin/chef-service-manager
 rm bin/chef-windows-service
 %endif
-
-# don't package this, a maintainer's rake task
-rm chef-config/lib/chef-config/package_task.rb
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f

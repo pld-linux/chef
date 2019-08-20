@@ -164,8 +164,8 @@
    end
  
    # Don't need to have an after block to reset the config...
---- chef-14.1.21/spec/unit/application/solo_spec.rb~	2018-05-21 18:22:54.000000000 +0200
-+++ chef-14.1.21/spec/unit/application/solo_spec.rb	2018-07-14 22:13:57.265002987 +0200
+--- chef-14.13.15/spec/unit/application/solo_spec.rb~	2019-08-14 19:42:36.000000000 +0300
++++ chef-14.13.15/spec/unit/application/solo_spec.rb	2019-08-20 17:10:40.315154871 +0300
 @@ -206,10 +206,10 @@
      end
  
@@ -173,7 +173,7 @@
 -      expect(Chef::Config).to receive(:find_chef_repo_path).and_return("/var/chef")
 +      expect(Chef::Config).to receive(:find_chef_repo_path).and_return("/var/lib/chef")
        app.reconfigure
-       expect(Chef::Config.has_key?(:chef_repo_path)).to be_truthy
+       expect(Chef::Config.key?(:chef_repo_path)).to be_truthy
 -      expect(Chef::Config[:chef_repo_path]).to eq ("/var/chef")
 +      expect(Chef::Config[:chef_repo_path]).to eq ("/var/lib/chef")
      end
@@ -290,3 +290,25 @@
  
    describe "when first created" do
      it "locates the lockfile in the file cache path by default" do
+--- chef-14.13.15/lib/chef/resource/file.rb~	2019-08-14 19:42:36.000000000 +0300
++++ chef-14.13.15/lib/chef/resource/file.rb	2019-08-20 17:14:28.073369726 +0300
+@@ -58,7 +58,7 @@
+                description: "Perform atomic file updates on a per-resource basis. Set to true for atomic file updates. Set to false for non-atomic file updates. This setting overrides file_atomic_update, which is a global setting found in the client.rb file."
+ 
+       property :backup, [ Integer, FalseClass ], desired_state: false, default: 5,
+-               description: "The number of backups to be kept in /var/chef/backup (for UNIX- and Linux-based platforms) or C:/chef/backup (for the Microsoft Windows platform). Set to false to prevent backups from being kept."
++               description: "The number of backups to be kept in /var/lib/chef/backup (for UNIX- and Linux-based platforms) or C:/chef/backup (for the Microsoft Windows platform). Set to false to prevent backups from being kept."
+ 
+       property :checksum, [ /^[a-zA-Z0-9]{64}$/, nil ],
+                description: "The SHA-256 checksum of the file. Use to ensure that a specific file is used. If the checksum does not match, the file is not used."
+--- chef-14.13.15/lib/chef/resource/launchd.rb~	2019-08-14 19:42:36.000000000 +0300
++++ chef-14.13.15/lib/chef/resource/launchd.rb	2019-08-20 17:14:38.793912812 +0300
+@@ -36,7 +36,7 @@
+ 
+       property :backup, [Integer, FalseClass],
+                desired_state: false,
+-               description: "The number of backups to be kept in /var/chef/backup. Set to false to prevent backups from being kept."
++               description: "The number of backups to be kept in /var/lib/chef/backup. Set to false to prevent backups from being kept."
+ 
+       property :cookbook, String,
+                desired_state: false,
