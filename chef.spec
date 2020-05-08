@@ -8,7 +8,7 @@
 Summary:	A systems integration framework, built to bring the benefits of configuration management to your entire infrastructure
 Name:		chef
 Version:	14.1.36
-Release:	3
+Release:	4
 License:	Apache v2.0
 Group:		Networking/Admin
 Source0:	https://github.com/chef/chef/archive/v%{version}/%{name}-%{version}.tar.gz
@@ -24,6 +24,7 @@ Patch3:		https://github.com/glensc/chef/compare/pld-knife-boostrap.patch
 Patch4:		optional-plist.patch
 Patch5:		gemdeps.patch
 Patch6:		rubygems.patch
+Patch7:		7994.patch
 URL:		https://www.chef.io/
 BuildRequires:	rpm-rubyprov
 BuildRequires:	rpmbuild(macros) >= 1.673
@@ -103,6 +104,7 @@ subcommand is documented in its own manual page.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 %{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
 
