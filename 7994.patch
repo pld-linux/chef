@@ -112,10 +112,10 @@ index d99dce89720..cd595e64f4f 100644
            src_str = src.empty? ? "" : " #{src.join(" ")}"
            if !version.nil? && !version.empty?
 -            shell_out_with_timeout!("#{gem_binary_path} install #{name} -q --no-rdoc --no-ri -v \"#{version}\"#{src_str}#{opts}", env: nil)
-+            shell_out_with_timeout!("#{gem_binary_path} install #{name} -q #{rdoc_string} --no-ri -v \"#{version}\"#{src_str}#{opts}", env: nil)
++            shell_out_with_timeout!("#{gem_binary_path} install #{name} -q #{rdoc_string} -v \"#{version}\"#{src_str}#{opts}", env: nil)
            else
 -            shell_out_with_timeout!("#{gem_binary_path} install \"#{name}\" -q --no-rdoc --no-ri #{src_str}#{opts}", env: nil)
-+            shell_out_with_timeout!("#{gem_binary_path} install \"#{name}\" -q #{rdoc_string} --no-ri #{src_str}#{opts}", env: nil)
++            shell_out_with_timeout!("#{gem_binary_path} install \"#{name}\" -q #{rdoc_string} #{src_str}#{opts}", env: nil)
            end
          end
  
